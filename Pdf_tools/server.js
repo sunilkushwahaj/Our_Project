@@ -3,7 +3,7 @@ const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const { PDFDocument } = require('pdf-lib');
+const { PDFDocument, degrees, StandardFonts, rgb } = require('pdf-lib');
 const sharp = require('sharp');
 const pdfImgConvert = require('pdf-img-convert');
 
@@ -314,6 +314,279 @@ app.post('/api/convert-image', upload.single('file'), async (req, res) => {
     console.error(err);
     if (uploadedFile) fs.unlink(uploadedFile.path, () => {});
     res.status(500).json({ error: 'Failed to convert image format: ' + err.message });
+  // ---- Helper: parse page string like "1-3, 5, 7-9" into Set of 0-based page indices ----
+function parsePageIndices(inputStr, totalPages) {
+  if (!inputStr || typeof inputStr !== 'string') return new Set();
+  const indices = new Set();
+  const parts = inputStr.split(',').map(s => s.trim()).filter(Boolean);
+
+  for (const part of parts) {
+    if (part.includes('-')) {
+      const [startStr, endStr] = part.split('-').map(s => s.trim());
+      const start = parseInt(startStr, 10);
+      const end = parseInt(endStr, 10);
+      if (isNaN(start) || isNaN(end)) continue;
+      const min = Math.max(1, Math.min(start, end));
+      const max = Math.min(totalPages, Math.max(start, end));
+      for (let i = min; i <= max; i++) {
+        indices.add(i - 1);
+      }
+    } else {
+      const pageNum = parseInt(part, 10);
+      if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
+        indices.add(pageNum - 1);
+      }
+    }
+  }
+  return indices;
+}
+
+// =========================================================
+// 7. ROTATE PDF - rotate pages by 90, 180, or 270 degrees
+// =========================================================
+app.post('/api/rotate', upload.single('file'), async (req, res) => {
+  const uploadedFile = req.file;
+  try {
+    if (!uploadedFile) return res.status(400).json({ error: 'Upload a PDF file' });
+
+    const angle = parseInt(req.body.angle || '90', 10);
+    if (![90, 180, 270].includes(angle)) {
+      fs.unlink(uploadedFile.path, () => {});
+      return res.status(400).json({ error: 'Rotation angle must be 90, 180, or 270 degrees' });
+    }
+
+    const pageScope = req.body.pageScope || 'all'; // 'all' | 'custom'
+    const customPagesStr = req.body.customPages || '';
+
+    const fileBytes = fs.readFileSync(uploadedFile.path);
+    const pdfDoc = await PDFDocument.load(fileBytes);
+    const totalPages = pdfDoc.getPageCount();
+
+    let targetIndices = new Set();
+    if (pageScope === 'custom' && customPagesStr.trim()) {
+      targetIndices = parsePageIndices(customPagesStr, totalPages);
+    } else {
+      for (let i = 0; i < totalPages; i++) targetIndices.add(i);
+    }
+
+    if (targetIndices.size === 0) {
+      fs.unlink(uploadedFile.path, () => {});
+      return res.status(400).json({ error: 'No valid target pages selected to rotate' });
+    }
+
+    targetIndices.forEach(idx => {
+      const page = pdfDoc.getPage(idx);
+      const currentRotation = page.getRotation().angle;
+      page.setRotation(degrees((currentRotation + angle) % 360));
+    });
+
+    const rotatedBytes = await pdfDoc.save();
+    const outputFilename = `rotated-${Date.now()}.pdf`;
+    const outputPath = path.join(OUTPUT_DIR, outputFilename);
+    fs.writeFileSync(outputPath, rotatedBytes);
+
+    fs.unlink(uploadedFile.path, () => {});
+    scheduleDelete(outputPath);
+
+    res.json({ success: true, downloadUrl: `/outputs/${outputFilename}` });
+  } catch (err) {
+    console.error(err);
+    if (uploadedFile) fs.unlink(uploadedFile.path, () => {});
+    res.status(500).json({ error: 'Failed to rotate PDF: ' + err.message });
+  }
+});
+
+// =========================================================
+// 8. DELETE PAGES - remove specific page numbers or ranges
+// =========================================================
+app.post('/api/delete-pages', upload.single('file'), async (req, res) => {
+  const uploadedFile = req.file;
+  try {
+    if (!uploadedFile) return res.status(400).json({ error: 'Upload a PDF file' });
+
+    const pagesToDeleteStr = req.body.pagesToDelete || '';
+    const fileBytes = fs.readFileSync(uploadedFile.path);
+    const srcPdf = await PDFDocument.load(fileBytes);
+    const totalPages = srcPdf.getPageCount();
+
+    const deleteIndices = parsePageIndices(pagesToDeleteStr, totalPages);
+
+    if (!deleteIndices || deleteIndices.size === 0) {
+      fs.unlink(uploadedFile.path, () => {});
+      return res.status(400).json({ error: 'Please specify valid page numbers to delete (e.g. 2, 4, 7-10)' });
+    }
+
+    if (deleteIndices.size >= totalPages) {
+      fs.unlink(uploadedFile.path, () => {});
+      return res.status(400).json({ error: 'Cannot delete all pages from the PDF' });
+    }
+
+    const keepIndices = [];
+    for (let i = 0; i < totalPages; i++) {
+      if (!deleteIndices.has(i)) {
+        keepIndices.push(i);
+      }
+    }
+
+    const newPdf = await PDFDocument.create();
+    const copiedPages = await newPdf.copyPages(srcPdf, keepIndices);
+    copiedPages.forEach(page => newPdf.addPage(page));
+
+    const newBytes = await newPdf.save();
+    const outputFilename = `deleted-pages-${Date.now()}.pdf`;
+    const outputPath = path.join(OUTPUT_DIR, outputFilename);
+    fs.writeFileSync(outputPath, newBytes);
+
+    fs.unlink(uploadedFile.path, () => {});
+    scheduleDelete(outputPath);
+
+    res.json({
+      success: true,
+      downloadUrl: `/outputs/${outputFilename}`,
+      remainingPages: keepIndices.length,
+      deletedCount: deleteIndices.size
+    });
+  } catch (err) {
+    console.error(err);
+    if (uploadedFile) fs.unlink(uploadedFile.path, () => {});
+    res.status(500).json({ error: 'Failed to delete pages from PDF: ' + err.message });
+  }
+});
+
+// =========================================================
+// 9. ADD WATERMARK - add custom text watermark across pages
+// =========================================================
+app.post('/api/watermark', upload.single('file'), async (req, res) => {
+  const uploadedFile = req.file;
+  try {
+    if (!uploadedFile) return res.status(400).json({ error: 'Upload a PDF file' });
+
+    const watermarkText = (req.body.text || 'CONFIDENTIAL').trim();
+    if (!watermarkText) {
+      fs.unlink(uploadedFile.path, () => {});
+      return res.status(400).json({ error: 'Watermark text cannot be empty' });
+    }
+
+    const position = req.body.position || 'diagonal'; // 'diagonal' | 'center'
+    const opacity = Math.max(0.05, Math.min(1.0, parseFloat(req.body.opacity || '0.3')));
+    const fontSize = parseInt(req.body.fontSize || '48', 10);
+
+    const fileBytes = fs.readFileSync(uploadedFile.path);
+    const pdfDoc = await PDFDocument.load(fileBytes);
+    const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const pages = pdfDoc.getPages();
+
+    const textWidth = font.widthOfTextAtSize(watermarkText, fontSize);
+    const textHeight = font.heightAtSize(fontSize);
+
+    pages.forEach(page => {
+      const { width, height } = page.getSize();
+
+      let x = (width - textWidth) / 2;
+      let y = (height - textHeight) / 2;
+      let rotationAngle = 0;
+
+      if (position === 'diagonal') {
+        rotationAngle = 45;
+        const rad = (45 * Math.PI) / 180;
+        const boundingW = textWidth * Math.cos(rad) + textHeight * Math.sin(rad);
+        const boundingH = textWidth * Math.sin(rad) + textHeight * Math.cos(rad);
+        x = (width - boundingW) / 2;
+        y = (height - boundingH) / 2 + (textWidth * Math.sin(rad)) / 2;
+      }
+
+      page.drawText(watermarkText, {
+        x: Math.max(10, x),
+        y: Math.max(10, y),
+        size: fontSize,
+        font,
+        color: rgb(0.5, 0.5, 0.5),
+        opacity,
+        rotate: degrees(rotationAngle),
+      });
+    });
+
+    const watermarkedBytes = await pdfDoc.save();
+    const outputFilename = `watermarked-${Date.now()}.pdf`;
+    const outputPath = path.join(OUTPUT_DIR, outputFilename);
+    fs.writeFileSync(outputPath, watermarkedBytes);
+
+    fs.unlink(uploadedFile.path, () => {});
+    scheduleDelete(outputPath);
+
+    res.json({ success: true, downloadUrl: `/outputs/${outputFilename}` });
+  } catch (err) {
+    console.error(err);
+    if (uploadedFile) fs.unlink(uploadedFile.path, () => {});
+    res.status(500).json({ error: 'Failed to add watermark: ' + err.message });
+  }
+});
+
+// =========================================================
+// 10. ADD PAGE NUMBERS - stamp page numbers on every page
+// =========================================================
+app.post('/api/page-numbers', upload.single('file'), async (req, res) => {
+  const uploadedFile = req.file;
+  try {
+    if (!uploadedFile) return res.status(400).json({ error: 'Upload a PDF file' });
+
+    const position = req.body.position || 'bottom-center'; // 'bottom-center' | 'bottom-right' | 'top-right'
+    const format = req.body.format || 'Page {n} of {total}';
+
+    const fileBytes = fs.readFileSync(uploadedFile.path);
+    const pdfDoc = await PDFDocument.load(fileBytes);
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const pages = pdfDoc.getPages();
+    const totalPages = pages.length;
+    const fontSize = 10;
+    const margin = 20;
+
+    pages.forEach((page, i) => {
+      const pageNum = i + 1;
+      const text = format
+        .replace('{n}', pageNum)
+        .replace('{total}', totalPages);
+
+      const textWidth = font.widthOfTextAtSize(text, fontSize);
+      const textHeight = font.heightAtSize(fontSize);
+      const { width, height } = page.getSize();
+
+      let x = (width - textWidth) / 2;
+      let y = margin;
+
+      if (position === 'bottom-right') {
+        x = width - textWidth - margin;
+        y = margin;
+      } else if (position === 'top-right') {
+        x = width - textWidth - margin;
+        y = height - margin - textHeight;
+      } else { // 'bottom-center'
+        x = (width - textWidth) / 2;
+        y = margin;
+      }
+
+      page.drawText(text, {
+        x,
+        y,
+        size: fontSize,
+        font,
+        color: rgb(0.2, 0.2, 0.2),
+      });
+    });
+
+    const numberedBytes = await pdfDoc.save();
+    const outputFilename = `numbered-${Date.now()}.pdf`;
+    const outputPath = path.join(OUTPUT_DIR, outputFilename);
+    fs.writeFileSync(outputPath, numberedBytes);
+
+    fs.unlink(uploadedFile.path, () => {});
+    scheduleDelete(outputPath);
+
+    res.json({ success: true, downloadUrl: `/outputs/${outputFilename}` });
+  } catch (err) {
+    console.error(err);
+    if (uploadedFile) fs.unlink(uploadedFile.path, () => {});
+    res.status(500).json({ error: 'Failed to add page numbers: ' + err.message });
   }
 });
 

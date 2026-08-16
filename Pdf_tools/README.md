@@ -11,9 +11,16 @@ Open http://localhost:3000
 ## What's included
 - **Merge** (`POST /api/merge`) - combine 2+ PDFs into one
 - **Split** (`POST /api/split`) - extract a page range, or split every page into a separate file
-- **Compress** (`POST /api/compress`) - re-saves PDF with object streams (helps with bloated PDFs, but not real image recompression - see note below)
-- Simple frontend in `public/index.html` to test all 3 tools in browser
-- Auto-delete: output files delete themselves after 1 hour (privacy)
+- **Compress** (`POST /api/compress`) - optimize document structure and shrink PDF file size
+- **Image to PDF** (`POST /api/image-to-pdf`) - convert JPG, PNG, or WebP images into a single PDF
+- **PDF to Image** (`POST /api/pdf-to-image`) - extract all PDF pages as standalone PNG or JPG images
+- **Image Converter** (`POST /api/convert-image`) - convert image formats between JPG, PNG, and WebP
+- **Rotate PDF** (`POST /api/rotate`) - rotate all pages or custom page ranges by 90°, 180°, or 270°
+- **Delete Pages** (`POST /api/delete-pages`) - remove specified page numbers or page ranges from PDF
+- **Add Watermark** (`POST /api/watermark`) - apply custom semi-transparent text watermark across pages
+- **Add Page Numbers** (`POST /api/page-numbers`) - stamp page numbers on every page with customizable position and format
+- Simple, modern, responsive frontend in `public/index.html` with soft-colored tool cards & tabbed workspace
+- Auto-delete: output files delete themselves after 1 hour (privacy-first)
 
 ## Next steps to make this production-ready
 
