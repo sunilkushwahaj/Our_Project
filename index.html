@@ -1377,23 +1377,23 @@
           <h2 id="workspaceTitle">Merge PDF Documents</h2>
         </div>
         <div class="tool-tabs">
-          <button class="tab-btn active" id="tab-merge" onclick="switchTool('merge')">Merge</button>
-          <button class="tab-btn" id="tab-split" onclick="switchTool('split')">Split</button>
-          <button class="tab-btn" id="tab-compress" onclick="switchTool('compress')">Compress</button>
-          <button class="tab-btn" id="tab-img2pdf" onclick="switchTool('img2pdf')">Image to PDF</button>
-          <button class="tab-btn" id="tab-pdf2img" onclick="switchTool('pdf2img')">PDF to Image</button>
-          <button class="tab-btn" id="tab-convertimg" onclick="switchTool('convertimg')">Image Converter</button>
-          <button class="tab-btn" id="tab-rotate" onclick="switchTool('rotate')">Rotate PDF</button>
-          <button class="tab-btn" id="tab-deletepages" onclick="switchTool('deletepages')">Delete Pages</button>
-          <button class="tab-btn" id="tab-watermark" onclick="switchTool('watermark')">Watermark</button>
-          <button class="tab-btn" id="tab-pagenumbers" onclick="switchTool('pagenumbers')">Page Numbers</button>
+          <button type="button" class="tab-btn active" id="tab-merge" onclick="switchTool('merge')">Merge</button>
+          <button type="button" class="tab-btn" id="tab-split" onclick="switchTool('split')">Split</button>
+          <button type="button" class="tab-btn" id="tab-compress" onclick="switchTool('compress')">Compress</button>
+          <button type="button" class="tab-btn" id="tab-img2pdf" onclick="switchTool('img2pdf')">Image to PDF</button>
+          <button type="button" class="tab-btn" id="tab-pdf2img" onclick="switchTool('pdf2img')">PDF to Image</button>
+          <button type="button" class="tab-btn" id="tab-convertimg" onclick="switchTool('convertimg')">Image Converter</button>
+          <button type="button" class="tab-btn" id="tab-rotate" onclick="switchTool('rotate')">Rotate PDF</button>
+          <button type="button" class="tab-btn" id="tab-deletepages" onclick="switchTool('deletepages')">Delete Pages</button>
+          <button type="button" class="tab-btn" id="tab-watermark" onclick="switchTool('watermark')">Watermark</button>
+          <button type="button" class="tab-btn" id="tab-pagenumbers" onclick="switchTool('pagenumbers')">Page Numbers</button>
         </div>
       </div>
 
       <!-- 1. MERGE PANEL -->
       <div class="tool-panel active" id="panel-merge">
         <div class="dropzone" id="dz-merge" onclick="document.getElementById('mergeFiles').click()">
-          <input type="file" id="mergeFiles" class="file-input-hidden" accept="application/pdf" multiple onchange="handleFileSelect('merge')">
+          <input type="file" id="mergeFiles" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" multiple onchange="handleFileSelect('merge')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
@@ -1403,14 +1403,14 @@
           <p>Select 2 or more PDF files (Up to 50MB per file)</p>
         </div>
         <div class="file-list" id="fileList-merge"></div>
-        <button class="btn-primary" id="btn-merge" onclick="mergePdfs()" disabled>Merge PDFs Now</button>
+        <button type="button" class="btn-primary" id="btn-merge" onclick="mergePdfs(event)">Merge PDFs Now</button>
         <div id="mergeResult"></div>
       </div>
 
       <!-- 2. SPLIT PANEL -->
       <div class="tool-panel" id="panel-split">
         <div class="dropzone" id="dz-split" onclick="document.getElementById('splitFile').click()">
-          <input type="file" id="splitFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('split')">
+          <input type="file" id="splitFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('split')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
@@ -1433,14 +1433,14 @@
             <label>To Page: <input type="number" id="endPage" value="1" min="1"></label>
           </div>
         </div>
-        <button class="btn-primary" id="btn-split" onclick="splitPdf()">Split PDF Now</button>
+        <button type="button" class="btn-primary" id="btn-split" onclick="splitPdf(event)">Split PDF Now</button>
         <div id="splitResult"></div>
       </div>
 
       <!-- 3. COMPRESS PANEL -->
       <div class="tool-panel" id="panel-compress">
         <div class="dropzone" id="dz-compress" onclick="document.getElementById('compressFile').click()">
-          <input type="file" id="compressFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('compress')">
+          <input type="file" id="compressFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('compress')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
@@ -1450,14 +1450,14 @@
           <p>Optimize document structure and shrink file size</p>
         </div>
         <div class="file-list" id="fileList-compress"></div>
-        <button class="btn-primary" id="btn-compress" onclick="compressPdf()">Compress PDF Now</button>
+        <button type="button" class="btn-primary" id="btn-compress" onclick="compressPdf(event)">Compress PDF Now</button>
         <div id="compressResult"></div>
       </div>
 
       <!-- 4. IMAGE TO PDF PANEL -->
       <div class="tool-panel" id="panel-img2pdf">
         <div class="dropzone" id="dz-img2pdf" onclick="document.getElementById('img2pdfFiles').click()">
-          <input type="file" id="img2pdfFiles" class="file-input-hidden" accept="image/jpeg,image/png,image/webp" multiple onchange="handleFileSelect('img2pdf')">
+          <input type="file" id="img2pdfFiles" class="file-input-hidden" onclick="event.stopPropagation()" accept="image/jpeg,image/png,image/webp" multiple onchange="handleFileSelect('img2pdf')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
@@ -1468,14 +1468,14 @@
           <p>Select 1 or more images to combine into a single PDF document</p>
         </div>
         <div class="file-list" id="fileList-img2pdf"></div>
-        <button class="btn-primary" id="btn-img2pdf" onclick="imageToPdf()">Convert Images to PDF</button>
+        <button type="button" class="btn-primary" id="btn-img2pdf" onclick="imageToPdf(event)">Convert Images to PDF</button>
         <div id="img2pdfResult"></div>
       </div>
 
       <!-- 5. PDF TO IMAGE PANEL -->
       <div class="tool-panel" id="panel-pdf2img">
         <div class="dropzone" id="dz-pdf2img" onclick="document.getElementById('pdf2imgFile').click()">
-          <input type="file" id="pdf2imgFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('pdf2img')">
+          <input type="file" id="pdf2imgFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('pdf2img')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -1495,14 +1495,14 @@
             </select>
           </div>
         </div>
-        <button class="btn-primary" id="btn-pdf2img" onclick="pdfToImage()">Convert PDF to Images</button>
+        <button type="button" class="btn-primary" id="btn-pdf2img" onclick="pdfToImage(event)">Convert PDF to Images</button>
         <div id="pdf2imgResult"></div>
       </div>
 
       <!-- 6. IMAGE CONVERTER PANEL -->
       <div class="tool-panel" id="panel-convertimg">
         <div class="dropzone" id="dz-convertimg" onclick="document.getElementById('convertimgFile').click()">
-          <input type="file" id="convertimgFile" class="file-input-hidden" accept="image/jpeg,image/png,image/webp" onchange="handleFileSelect('convertimg')">
+          <input type="file" id="convertimgFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="image/jpeg,image/png,image/webp" onchange="handleFileSelect('convertimg')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
@@ -1523,14 +1523,14 @@
             </select>
           </div>
         </div>
-        <button class="btn-primary" id="btn-convertimg" onclick="convertImage()">Convert Image Format</button>
+        <button type="button" class="btn-primary" id="btn-convertimg" onclick="convertImage(event)">Convert Image Format</button>
         <div id="convertimgResult"></div>
       </div>
 
       <!-- 7. ROTATE PANEL -->
       <div class="tool-panel" id="panel-rotate">
         <div class="dropzone" id="dz-rotate" onclick="document.getElementById('rotateFile').click()">
-          <input type="file" id="rotateFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('rotate')">
+          <input type="file" id="rotateFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('rotate')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21.5 2v6h-6"/><path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
@@ -1561,14 +1561,14 @@
             <input type="text" id="rotateCustomPages" placeholder="e.g. 1-3, 5, 8" style="padding: 10px 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px; outline: none;">
           </div>
         </div>
-        <button class="btn-primary" id="btn-rotate" onclick="rotatePdf()">Rotate PDF Now</button>
+        <button type="button" class="btn-primary" id="btn-rotate" onclick="rotatePdf(event)">Rotate PDF Now</button>
         <div id="rotateResult"></div>
       </div>
 
       <!-- 8. DELETE PAGES PANEL -->
       <div class="tool-panel" id="panel-deletepages">
         <div class="dropzone" id="dz-deletepages" onclick="document.getElementById('deletepagesFile').click()">
-          <input type="file" id="deletepagesFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('deletepages')">
+          <input type="file" id="deletepagesFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('deletepages')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -1584,14 +1584,14 @@
             <input type="text" id="pagesToDelete" placeholder="e.g. 2, 4, 7-10" style="padding: 10px 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px; width: 220px; outline: none;">
           </div>
         </div>
-        <button class="btn-primary" id="btn-deletepages" onclick="deletePdfPages()">Delete Specified Pages</button>
+        <button type="button" class="btn-primary" id="btn-deletepages" onclick="deletePdfPages(event)">Delete Specified Pages</button>
         <div id="deletepagesResult"></div>
       </div>
 
       <!-- 9. WATERMARK PANEL -->
       <div class="tool-panel" id="panel-watermark">
         <div class="dropzone" id="dz-watermark" onclick="document.getElementById('watermarkFile').click()">
-          <input type="file" id="watermarkFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('watermark')">
+          <input type="file" id="watermarkFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('watermark')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -1621,14 +1621,14 @@
             </select>
           </div>
         </div>
-        <button class="btn-primary" id="btn-watermark" onclick="addWatermark()">Add Watermark to PDF</button>
+        <button type="button" class="btn-primary" id="btn-watermark" onclick="addWatermark(event)">Add Watermark to PDF</button>
         <div id="watermarkResult"></div>
       </div>
 
       <!-- 10. PAGE NUMBERS PANEL -->
       <div class="tool-panel" id="panel-pagenumbers">
         <div class="dropzone" id="dz-pagenumbers" onclick="document.getElementById('pagenumbersFile').click()">
-          <input type="file" id="pagenumbersFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('pagenumbers')">
+          <input type="file" id="pagenumbersFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('pagenumbers')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/>
@@ -1655,7 +1655,7 @@
             </select>
           </div>
         </div>
-        <button class="btn-primary" id="btn-pagenumbers" onclick="addPageNumbers()">Add Page Numbers to PDF</button>
+        <button type="button" class="btn-primary" id="btn-pagenumbers" onclick="addPageNumbers(event)">Add Page Numbers to PDF</button>
         <div id="pagenumbersResult"></div>
       </div>
     </section>
@@ -1721,9 +1721,8 @@
   </footer>
 
   <script>
-    // Smart API origin resolution: if served on port 5500 (Live Server), direct API calls to Express on port 3000
-    const isLiveServer = window.location.port === '5500' || (window.location.hostname === '127.0.0.1' && window.location.port !== '3000');
-    const API = isLiveServer ? 'http://localhost:3000' : '';
+    // Smart API origin resolution: if not served directly on port 3000, direct API calls to Express backend on port 3000
+    const API = window.location.port === '3000' ? '' : 'http://localhost:3000';
 
     // Navbar & Dropdown Helpers
     function toggleMobileMenu() {
@@ -1779,6 +1778,13 @@
 
     function showResult(elId, html, isError = false) {
       const el = document.getElementById(elId);
+      if (!el) return;
+      if (!html) {
+        el.innerHTML = '';
+        el.style.display = 'none';
+        return;
+      }
+      el.style.display = 'block';
       el.innerHTML = `<div class="result-banner ${isError ? 'error' : 'success'}">${html}</div>`;
     }
 
@@ -1851,8 +1857,10 @@
       }
     }
 
-    // Handle file drag & drop & preview
     function handleFileSelect(tool) {
+      const resEl = document.getElementById(`${tool}Result`);
+      if (resEl && tool !== 'merge') resEl.innerHTML = '';
+
       if (tool === 'merge') {
         const input = document.getElementById('mergeFiles');
         if (input && input.files && input.files.length > 0) {
@@ -1900,6 +1908,9 @@
     }
 
     function clearFiles(tool) {
+      const resEl = document.getElementById(`${tool === 'img2pdf' ? 'img2pdf' : tool === 'pdf2img' ? 'pdf2img' : tool === 'convertimg' ? 'convertimg' : tool === 'deletepages' ? 'deletepages' : tool}Result`);
+      if (resEl) showResult(resEl.id, '');
+
       if (tool === 'merge') {
         mergeFileList = [];
         renderMergeFileList();
@@ -1967,7 +1978,8 @@
     });
 
     // 1. MERGE PDF
-    async function mergePdfs() {
+    async function mergePdfs(e) {
+      if (e) e.preventDefault();
       const btn = document.getElementById('btn-merge');
       if (!mergeFileList || mergeFileList.length < 2) return showResult('mergeResult', 'Please select at least 2 PDF files to merge.', true);
 
@@ -1985,7 +1997,7 @@
 
         showResult('mergeResult', `
           <span><strong>Success!</strong> Your merged PDF is ready.</span>
-          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Merged PDF
           </a>
@@ -2005,7 +2017,8 @@
     }
 
     // 2. SPLIT PDF
-    async function splitPdf() {
+    async function splitPdf(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('splitFile');
       const btn = document.getElementById('btn-split');
       if (!input.files || !input.files.length) return showResult('splitResult', 'Please select a PDF file to split.', true);
@@ -2026,7 +2039,7 @@
         if (!res.ok) throw new Error(data.error);
 
         const links = data.files.map((url, i) => `
-          <a class="download-btn" href="${getDownloadUrl(url)}" download>
+          <a class="download-btn" href="${getDownloadUrl(url)}" download target="_blank" rel="noopener noreferrer">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Part ${i + 1}
           </a>
@@ -2045,7 +2058,8 @@
     }
 
     // 3. COMPRESS PDF
-    async function compressPdf() {
+    async function compressPdf(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('compressFile');
       const btn = document.getElementById('btn-compress');
       if (!input.files || !input.files.length) return showResult('compressResult', 'Please select a PDF file to compress.', true);
@@ -2067,7 +2081,7 @@
             <strong>Success!</strong> Reduced from ${(data.originalSize/1024).toFixed(0)} KB to ${(data.compressedSize/1024).toFixed(0)} KB 
             <span style="color: var(--success); font-weight:700;">(${data.savedPercent}% saved)</span>
           </div>
-          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Compressed PDF
           </a>
@@ -2081,7 +2095,8 @@
     }
 
     // 4. IMAGE TO PDF
-    async function imageToPdf() {
+    async function imageToPdf(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('img2pdfFiles');
       const btn = document.getElementById('btn-img2pdf');
       if (!input.files || input.files.length === 0) return showResult('img2pdfResult', 'Please select at least 1 image file.', true);
@@ -2100,7 +2115,7 @@
 
         showResult('img2pdfResult', `
           <span><strong>Success!</strong> Created PDF from ${input.files.length} image(s).</span>
-          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Generated PDF
           </a>
@@ -2114,7 +2129,8 @@
     }
 
     // 5. PDF TO IMAGE
-    async function pdfToImage() {
+    async function pdfToImage(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('pdf2imgFile');
       const btn = document.getElementById('btn-pdf2img');
       if (!input.files || !input.files.length) return showResult('pdf2imgResult', 'Please select a PDF file.', true);
@@ -2133,7 +2149,7 @@
         if (!res.ok) throw new Error(data.error);
 
         const links = data.files.map((url, i) => `
-          <a class="download-btn" href="${getDownloadUrl(url)}" download>
+          <a class="download-btn" href="${getDownloadUrl(url)}" download target="_blank" rel="noopener noreferrer">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Page ${i + 1}
           </a>
@@ -2152,7 +2168,8 @@
     }
 
     // 6. JPG ↔ PNG IMAGE CONVERTER
-    async function convertImage() {
+    async function convertImage(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('convertimgFile');
       const btn = document.getElementById('btn-convertimg');
       if (!input.files || !input.files.length) return showResult('convertimgResult', 'Please select an image file.', true);
@@ -2172,7 +2189,7 @@
 
         showResult('convertimgResult', `
           <span><strong>Success!</strong> Image format converted.</span>
-          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Converted Image
           </a>
@@ -2186,7 +2203,8 @@
     }
 
     // 7. ROTATE PDF
-    async function rotatePdf() {
+    async function rotatePdf(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('rotateFile');
       const btn = document.getElementById('btn-rotate');
       if (!input.files || !input.files.length) return showResult('rotateResult', 'Please select a PDF file to rotate.', true);
@@ -2208,7 +2226,7 @@
 
         showResult('rotateResult', `
           <span><strong>Success!</strong> Your rotated PDF is ready.</span>
-          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Rotated PDF
           </a>
@@ -2222,7 +2240,8 @@
     }
 
     // 8. DELETE PAGES
-    async function deletePdfPages() {
+    async function deletePdfPages(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('deletepagesFile');
       const btn = document.getElementById('btn-deletepages');
       const pagesToDelete = document.getElementById('pagesToDelete').value;
@@ -2244,7 +2263,7 @@
 
         showResult('deletepagesResult', `
           <div><strong>Success!</strong> Deleted ${data.deletedCount} page(s) (${data.remainingPages} remaining).</div>
-          <a class="download-btn" style="margin-top: 6px;" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" style="margin-top: 6px;" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Processed PDF
           </a>
@@ -2258,7 +2277,8 @@
     }
 
     // 9. ADD WATERMARK
-    async function addWatermark() {
+    async function addWatermark(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('watermarkFile');
       const btn = document.getElementById('btn-watermark');
       const text = document.getElementById('watermarkText').value;
@@ -2282,7 +2302,7 @@
 
         showResult('watermarkResult', `
           <span><strong>Success!</strong> Watermark added to your PDF.</span>
-          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Watermarked PDF
           </a>
@@ -2296,7 +2316,8 @@
     }
 
     // 10. ADD PAGE NUMBERS
-    async function addPageNumbers() {
+    async function addPageNumbers(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('pagenumbersFile');
       const btn = document.getElementById('btn-pagenumbers');
       if (!input.files || !input.files.length) return showResult('pagenumbersResult', 'Please select a PDF file.', true);
@@ -2317,7 +2338,7 @@
 
         showResult('pagenumbersResult', `
           <span><strong>Success!</strong> Page numbers added to your PDF.</span>
-          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Numbered PDF
           </a>

@@ -121,6 +121,131 @@
     color: var(--primary);
   }
 
+  /* Dropdown Navigation */
+  .nav-dropdown {
+    position: relative;
+  }
+
+  .dropdown-toggle {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--slate-700);
+    font-weight: 600;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .dropdown-toggle:hover, .nav-dropdown.open .dropdown-toggle {
+    color: var(--primary);
+    background: var(--primary-light);
+    border-color: #c7d2fe;
+  }
+
+  .chevron-icon {
+    transition: transform 0.25s ease;
+  }
+
+  .nav-dropdown.open .chevron-icon {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    width: 320px;
+    border-radius: var(--radius);
+    border: 1px solid var(--slate-200);
+    box-shadow: var(--shadow-lg);
+    padding: 8px;
+    z-index: 100;
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .nav-dropdown.open .dropdown-menu {
+    display: grid;
+    animation: dropdownFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (min-width: 769px) {
+    .nav-dropdown:hover .dropdown-menu {
+      display: grid;
+      animation: dropdownFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-dropdown:hover .chevron-icon {
+      transform: rotate(180deg);
+    }
+    .nav-dropdown:hover .dropdown-toggle {
+      color: var(--primary);
+      background: var(--primary-light);
+      border-color: #c7d2fe;
+    }
+  }
+
+  @keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+
+  .dropdown-item:hover {
+    background: var(--slate-100);
+  }
+
+  .dropdown-item-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .merge-icon-sm { background: #ede9fe; color: #6d28d9; }
+  .split-icon-sm { background: #ffe4e6; color: #e11d48; }
+  .compress-icon-sm { background: #d1fae5; color: #047857; }
+  .img2pdf-icon-sm { background: #fef3c7; color: #d97706; }
+  .pdf2img-icon-sm { background: #e0f2fe; color: #0284c7; }
+  .convertimg-icon-sm { background: #ccfbf1; color: #0d9488; }
+  .rotate-icon-sm { background: #e0e7ff; color: #4338ca; }
+  .deletepages-icon-sm { background: #ffe4e6; color: #be123c; }
+  .watermark-icon-sm { background: #ffedd5; color: #c2410c; }
+  .pagenumbers-icon-sm { background: #dcfce7; color: #15803d; }
+
+  .dropdown-item-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.2;
+  }
+
+  .dropdown-item-desc {
+    font-size: 11.5px;
+    color: var(--slate-500);
+    line-height: 1.2;
+  }
+
   .badge-free {
     background: var(--primary-light);
     color: var(--primary);
@@ -153,17 +278,58 @@
     .nav-links.open {
       display: flex;
     }
+    .nav-dropdown {
+      width: 100%;
+    }
+    .dropdown-toggle {
+      width: 100%;
+      justify-content: space-between;
+      padding: 10px 14px;
+      font-size: 15px;
+      border-color: var(--slate-200);
+    }
+    .dropdown-menu {
+      position: static;
+      transform: none;
+      box-shadow: none;
+      border: 1px solid var(--slate-200);
+      margin-top: 8px;
+      width: 100%;
+      max-height: 340px;
+      overflow-y: auto;
+    }
+    @keyframes dropdownFadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   }
 
   /* Hero Section */
   .hero {
-    padding: 68px 24px 48px;
+    width: 100%;
+    padding: 68px 32px 56px;
     text-align: center;
-    max-width: 860px;
-    margin: 0 auto 36px;
     background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.12) 0%, rgba(248, 250, 252, 0) 70%), linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
-    border-radius: 0 0 28px 28px;
     border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 48px;
+  }
+
+  .hero-container {
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 1440px) {
+    .hero {
+      padding: 76px 48px 64px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 48px 20px 40px;
+      margin-bottom: 32px;
+    }
   }
 
   .hero-pill {
@@ -354,6 +520,46 @@
     border-color: #0d9488;
   }
 
+  .tool-card#card-rotate {
+    background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%);
+    border: 1px solid #c7d2fe;
+  }
+  .tool-card#card-rotate:hover, .tool-card#card-rotate.active {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.12);
+    border-color: #4f46e5;
+  }
+
+  .tool-card#card-deletepages {
+    background: linear-gradient(135deg, #fff1f2 0%, #ffffff 100%);
+    border: 1px solid #fecdd3;
+  }
+  .tool-card#card-deletepages:hover, .tool-card#card-deletepages.active {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 25px -5px rgba(225, 29, 72, 0.12);
+    border-color: #e11d48;
+  }
+
+  .tool-card#card-watermark {
+    background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
+    border: 1px solid #ffedd5;
+  }
+  .tool-card#card-watermark:hover, .tool-card#card-watermark.active {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 25px -5px rgba(234, 88, 12, 0.12);
+    border-color: #ea580c;
+  }
+
+  .tool-card#card-pagenumbers {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    border: 1px solid #bbf7d0;
+  }
+  .tool-card#card-pagenumbers:hover, .tool-card#card-pagenumbers.active {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 25px -5px rgba(22, 163, 74, 0.12);
+    border-color: #16a34a;
+  }
+
   .tool-card-header {
     display: flex;
     align-items: center;
@@ -379,6 +585,10 @@
   .tool-icon.img2pdf-icon { background: #fef3c7; color: #d97706; }
   .tool-icon.pdf2img-icon { background: #e0f2fe; color: #0284c7; }
   .tool-icon.convertimg-icon { background: #ccfbf1; color: #0d9488; }
+  .tool-icon.rotate-icon { background: #e0e7ff; color: #4338ca; }
+  .tool-icon.deletepages-icon { background: #ffe4e6; color: #be123c; }
+  .tool-icon.watermark-icon { background: #ffedd5; color: #c2410c; }
+  .tool-icon.pagenumbers-icon { background: #dcfce7; color: #15803d; }
 
   .tool-card h3 {
     font-size: 18px;
@@ -406,6 +616,10 @@
   #card-img2pdf .tool-card-action { color: #d97706; }
   #card-pdf2img .tool-card-action { color: #0284c7; }
   #card-convertimg .tool-card-action { color: #0d9488; }
+  #card-rotate .tool-card-action { color: #4338ca; }
+  #card-deletepages .tool-card-action { color: #be123c; }
+  #card-watermark .tool-card-action { color: #c2410c; }
+  #card-pagenumbers .tool-card-action { color: #15803d; }
 
   /* Interactive Workspace Section */
   .workspace-section {
@@ -836,12 +1050,106 @@
       </button>
 
       <ul class="nav-links" id="navLinks">
-        <li><a href="#workspace" onclick="switchTool('merge'); closeMobileMenu();">Merge</a></li>
-        <li><a href="#workspace" onclick="switchTool('split'); closeMobileMenu();">Split</a></li>
-        <li><a href="#workspace" onclick="switchTool('compress'); closeMobileMenu();">Compress</a></li>
-        <li><a href="#workspace" onclick="switchTool('img2pdf'); closeMobileMenu();">Image to PDF</a></li>
-        <li><a href="#workspace" onclick="switchTool('pdf2img'); closeMobileMenu();">PDF to Image</a></li>
-        <li><a href="#workspace" onclick="switchTool('convertimg'); closeMobileMenu();">Image Converter</a></li>
+        <li class="nav-dropdown" id="toolsDropdown">
+          <button class="dropdown-toggle" id="dropdownBtn" onclick="toggleToolsDropdown(event)">
+            <span>Tools</span>
+            <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="#workspace" onclick="switchTool('merge'); closeAllMenus();" class="dropdown-item">
+              <div class="dropdown-item-icon merge-icon-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7h11"/><path d="M8 12h11"/><path d="M8 17h11"/><rect x="3" y="5" width="2" height="14" rx="1"/></svg>
+              </div>
+              <div>
+                <div class="dropdown-item-title">Merge PDF</div>
+                <div class="dropdown-item-desc">Combine multiple PDFs</div>
+              </div>
+            </a>
+            <a href="#workspace" onclick="switchTool('split'); closeAllMenus();" class="dropdown-item">
+              <div class="dropdown-item-icon split-icon-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+              </div>
+              <div>
+                <div class="dropdown-item-title">Split PDF</div>
+                <div class="dropdown-item-desc">Extract pages or split</div>
+              </div>
+            </a>
+            <a href="#workspace" onclick="switchTool('compress'); closeAllMenus();" class="dropdown-item">
+              <div class="dropdown-item-icon compress-icon-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="M14 10l7-7"/><path d="M3 21l7-7"/></svg>
+              </div>
+              <div>
+                <div class="dropdown-item-title">Compress PDF</div>
+                <div class="dropdown-item-desc">Reduce file size</div>
+              </div>
+            </a>
+            <a href="#workspace" onclick="switchTool('img2pdf'); closeAllMenus();" class="dropdown-item">
+              <div class="dropdown-item-icon img2pdf-icon-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div>
+                <div class="dropdown-item-title">Image to PDF</div>
+                <div class="dropdown-item-desc">JPG, PNG, WebP to PDF</div>
+              </div>
+            </a>
+            <a href="#workspace" onclick="switchTool('pdf2img'); closeAllMenus();" class="dropdown-item">
+              <div class="dropdown-item-icon pdf2img-icon-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+              </div>
+              <div>
+                <div class="dropdown-item-title">PDF to Image</div>
+                <div class="dropdown-item-desc">Extract pages as PNG/JPG</div>
+              </div>
+            </a>
+            <a href="#workspace" onclick="switchTool('convertimg'); closeAllMenus();" class="dropdown-item">
+              <div class="dropdown-item-icon convertimg-icon-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              </div>
+              <div>
+                <div class="dropdown-item-title">Image Converter</div>
+                <div class="dropdown-item-desc">JPG, PNG, WebP convert</div>
+              </div>
+            </a>
+            <a href="#workspace" onclick="switchTool('rotate'); closeAllMenus();" class="dropdown-item">
+              <div class="dropdown-item-icon rotate-icon-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6"/><path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              </div>
+              <div>
+                <div class="dropdown-item-title">Rotate PDF</div>
+                <div class="dropdown-item-desc">Rotate page angles</div>
+              </div>
+            </a>
+            <a href="#workspace" onclick="switchTool('deletepages'); closeAllMenus();" class="dropdown-item">
+              <div class="dropdown-item-icon deletepages-icon-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </div>
+              <div>
+                <div class="dropdown-item-title">Delete Pages</div>
+                <div class="dropdown-item-desc">Remove unwanted pages</div>
+              </div>
+            </a>
+            <a href="#workspace" onclick="switchTool('watermark'); closeAllMenus();" class="dropdown-item">
+              <div class="dropdown-item-icon watermark-icon-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div>
+                <div class="dropdown-item-title">Add Watermark</div>
+                <div class="dropdown-item-desc">Custom text watermarks</div>
+              </div>
+            </a>
+            <a href="#workspace" onclick="switchTool('pagenumbers'); closeAllMenus();" class="dropdown-item">
+              <div class="dropdown-item-icon pagenumbers-icon-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+              </div>
+              <div>
+                <div class="dropdown-item-title">Page Numbers</div>
+                <div class="dropdown-item-desc">Stamp page numbers</div>
+              </div>
+            </a>
+          </div>
+        </li>
         <li><span class="badge-free">100% Free</span></li>
       </ul>
     </div>
@@ -849,42 +1157,44 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <div class="hero-pill">
-      <span>✨ 6 Fast, Free & Private PDF/Image Tools</span>
-    </div>
-    <h1>Free PDF & Image Tools — <span>Convert, Merge & Split</span> Online</h1>
-    <p>Every tool you need for PDFs & images in one place. Fast conversion, no software installation, and auto-deleted after 1 hour.</p>
-
-    <!-- Hero CTA Button -->
-    <div class="hero-cta-wrapper">
-      <button class="hero-cta-btn" onclick="scrollToWorkspace()">
-        Choose a Tool
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <polyline points="19 12 12 19 5 12"></polyline>
-        </svg>
-      </button>
-    </div>
-
-    <div class="hero-features">
-      <div class="hero-feature-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        No Registration Required
+    <div class="hero-container">
+      <div class="hero-pill">
+        <span>✨ 10 Fast, Free & Private PDF/Image Tools</span>
       </div>
-      <div class="hero-feature-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        100% Private & Auto-Deleted
+      <h1>Free PDF & Image Tools — <span>Convert, Edit & Manipulate</span> Online</h1>
+      <p>Every tool you need for PDFs & images in one place. Fast conversion, no software installation, and auto-deleted after 1 hour.</p>
+
+      <!-- Hero CTA Button -->
+      <div class="hero-cta-wrapper">
+        <button class="hero-cta-btn" onclick="scrollToWorkspace()">
+          Choose a Tool
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <polyline points="19 12 12 19 5 12"></polyline>
+          </svg>
+        </button>
       </div>
-      <div class="hero-feature-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        Works on Any Device
+
+      <div class="hero-features">
+        <div class="hero-feature-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          No Registration Required
+        </div>
+        <div class="hero-feature-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          100% Private & Auto-Deleted
+        </div>
+        <div class="hero-feature-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Works on Any Device
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Main Content -->
   <main>
-    <!-- Tool Cards Grid - 6 Tools -->
+    <!-- Tool Cards Grid - 10 Tools -->
     <div class="tools-grid">
       <!-- 1. Merge Card -->
       <div class="tool-card active" onclick="switchTool('merge')" id="card-merge">
@@ -993,6 +1303,71 @@
         </div>
         <div class="tool-card-action">Select Tool →</div>
       </div>
+
+      <!-- 7. Rotate PDF Card -->
+      <div class="tool-card" onclick="switchTool('rotate')" id="card-rotate">
+        <div>
+          <div class="tool-card-header">
+            <div class="tool-icon rotate-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6"/><path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+            </div>
+            <h3>Rotate PDF</h3>
+          </div>
+          <p>Rotate all pages or custom page ranges by 90°, 180°, or 270° easily.</p>
+        </div>
+        <div class="tool-card-action">Select Tool →</div>
+      </div>
+
+      <!-- 8. Delete Pages Card -->
+      <div class="tool-card" onclick="switchTool('deletepages')" id="card-deletepages">
+        <div>
+          <div class="tool-card-header">
+            <div class="tool-icon deletepages-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+            </div>
+            <h3>Delete Pages</h3>
+          </div>
+          <p>Remove unwanted PDF pages or page ranges and download a cleaned PDF.</p>
+        </div>
+        <div class="tool-card-action">Select Tool →</div>
+      </div>
+
+      <!-- 9. Watermark Card -->
+      <div class="tool-card" onclick="switchTool('watermark')" id="card-watermark">
+        <div>
+          <div class="tool-card-header">
+            <div class="tool-icon watermark-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3>Add Watermark</h3>
+          </div>
+          <p>Stamp custom text watermarks diagonally or centered with adjustable opacity.</p>
+        </div>
+        <div class="tool-card-action">Select Tool →</div>
+      </div>
+
+      <!-- 10. Page Numbers Card -->
+      <div class="tool-card" onclick="switchTool('pagenumbers')" id="card-pagenumbers">
+        <div>
+          <div class="tool-card-header">
+            <div class="tool-icon pagenumbers-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/>
+                <line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/>
+              </svg>
+            </div>
+            <h3>Add Page Numbers</h3>
+          </div>
+          <p>Stamp customizable page numbers on all pages in your preferred position.</p>
+        </div>
+        <div class="tool-card-action">Select Tool →</div>
+      </div>
     </div>
 
     <!-- Interactive Workspace Panel -->
@@ -1002,19 +1377,23 @@
           <h2 id="workspaceTitle">Merge PDF Documents</h2>
         </div>
         <div class="tool-tabs">
-          <button class="tab-btn active" id="tab-merge" onclick="switchTool('merge')">Merge</button>
-          <button class="tab-btn" id="tab-split" onclick="switchTool('split')">Split</button>
-          <button class="tab-btn" id="tab-compress" onclick="switchTool('compress')">Compress</button>
-          <button class="tab-btn" id="tab-img2pdf" onclick="switchTool('img2pdf')">Image to PDF</button>
-          <button class="tab-btn" id="tab-pdf2img" onclick="switchTool('pdf2img')">PDF to Image</button>
-          <button class="tab-btn" id="tab-convertimg" onclick="switchTool('convertimg')">Image Converter</button>
+          <button type="button" class="tab-btn active" id="tab-merge" onclick="switchTool('merge')">Merge</button>
+          <button type="button" class="tab-btn" id="tab-split" onclick="switchTool('split')">Split</button>
+          <button type="button" class="tab-btn" id="tab-compress" onclick="switchTool('compress')">Compress</button>
+          <button type="button" class="tab-btn" id="tab-img2pdf" onclick="switchTool('img2pdf')">Image to PDF</button>
+          <button type="button" class="tab-btn" id="tab-pdf2img" onclick="switchTool('pdf2img')">PDF to Image</button>
+          <button type="button" class="tab-btn" id="tab-convertimg" onclick="switchTool('convertimg')">Image Converter</button>
+          <button type="button" class="tab-btn" id="tab-rotate" onclick="switchTool('rotate')">Rotate PDF</button>
+          <button type="button" class="tab-btn" id="tab-deletepages" onclick="switchTool('deletepages')">Delete Pages</button>
+          <button type="button" class="tab-btn" id="tab-watermark" onclick="switchTool('watermark')">Watermark</button>
+          <button type="button" class="tab-btn" id="tab-pagenumbers" onclick="switchTool('pagenumbers')">Page Numbers</button>
         </div>
       </div>
 
       <!-- 1. MERGE PANEL -->
       <div class="tool-panel active" id="panel-merge">
         <div class="dropzone" id="dz-merge" onclick="document.getElementById('mergeFiles').click()">
-          <input type="file" id="mergeFiles" class="file-input-hidden" accept="application/pdf" multiple onchange="handleFileSelect('merge')">
+          <input type="file" id="mergeFiles" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" multiple onchange="handleFileSelect('merge')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
@@ -1024,14 +1403,14 @@
           <p>Select 2 or more PDF files (Up to 50MB per file)</p>
         </div>
         <div class="file-list" id="fileList-merge"></div>
-        <button class="btn-primary" id="btn-merge" onclick="mergePdfs()">Merge PDFs Now</button>
+        <button type="button" class="btn-primary" id="btn-merge" onclick="mergePdfs(event)">Merge PDFs Now</button>
         <div id="mergeResult"></div>
       </div>
 
       <!-- 2. SPLIT PANEL -->
       <div class="tool-panel" id="panel-split">
         <div class="dropzone" id="dz-split" onclick="document.getElementById('splitFile').click()">
-          <input type="file" id="splitFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('split')">
+          <input type="file" id="splitFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('split')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
@@ -1054,14 +1433,14 @@
             <label>To Page: <input type="number" id="endPage" value="1" min="1"></label>
           </div>
         </div>
-        <button class="btn-primary" id="btn-split" onclick="splitPdf()">Split PDF Now</button>
+        <button type="button" class="btn-primary" id="btn-split" onclick="splitPdf(event)">Split PDF Now</button>
         <div id="splitResult"></div>
       </div>
 
       <!-- 3. COMPRESS PANEL -->
       <div class="tool-panel" id="panel-compress">
         <div class="dropzone" id="dz-compress" onclick="document.getElementById('compressFile').click()">
-          <input type="file" id="compressFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('compress')">
+          <input type="file" id="compressFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('compress')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
@@ -1071,14 +1450,14 @@
           <p>Optimize document structure and shrink file size</p>
         </div>
         <div class="file-list" id="fileList-compress"></div>
-        <button class="btn-primary" id="btn-compress" onclick="compressPdf()">Compress PDF Now</button>
+        <button type="button" class="btn-primary" id="btn-compress" onclick="compressPdf(event)">Compress PDF Now</button>
         <div id="compressResult"></div>
       </div>
 
       <!-- 4. IMAGE TO PDF PANEL -->
       <div class="tool-panel" id="panel-img2pdf">
         <div class="dropzone" id="dz-img2pdf" onclick="document.getElementById('img2pdfFiles').click()">
-          <input type="file" id="img2pdfFiles" class="file-input-hidden" accept="image/jpeg,image/png,image/webp" multiple onchange="handleFileSelect('img2pdf')">
+          <input type="file" id="img2pdfFiles" class="file-input-hidden" onclick="event.stopPropagation()" accept="image/jpeg,image/png,image/webp" multiple onchange="handleFileSelect('img2pdf')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
@@ -1089,14 +1468,14 @@
           <p>Select 1 or more images to combine into a single PDF document</p>
         </div>
         <div class="file-list" id="fileList-img2pdf"></div>
-        <button class="btn-primary" id="btn-img2pdf" onclick="imageToPdf()">Convert Images to PDF</button>
+        <button type="button" class="btn-primary" id="btn-img2pdf" onclick="imageToPdf(event)">Convert Images to PDF</button>
         <div id="img2pdfResult"></div>
       </div>
 
       <!-- 5. PDF TO IMAGE PANEL -->
       <div class="tool-panel" id="panel-pdf2img">
         <div class="dropzone" id="dz-pdf2img" onclick="document.getElementById('pdf2imgFile').click()">
-          <input type="file" id="pdf2imgFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('pdf2img')">
+          <input type="file" id="pdf2imgFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('pdf2img')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -1116,14 +1495,14 @@
             </select>
           </div>
         </div>
-        <button class="btn-primary" id="btn-pdf2img" onclick="pdfToImage()">Convert PDF to Images</button>
+        <button type="button" class="btn-primary" id="btn-pdf2img" onclick="pdfToImage(event)">Convert PDF to Images</button>
         <div id="pdf2imgResult"></div>
       </div>
 
       <!-- 6. IMAGE CONVERTER PANEL -->
       <div class="tool-panel" id="panel-convertimg">
         <div class="dropzone" id="dz-convertimg" onclick="document.getElementById('convertimgFile').click()">
-          <input type="file" id="convertimgFile" class="file-input-hidden" accept="image/jpeg,image/png,image/webp" onchange="handleFileSelect('convertimg')">
+          <input type="file" id="convertimgFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="image/jpeg,image/png,image/webp" onchange="handleFileSelect('convertimg')">
           <div class="dropzone-icon">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
@@ -1144,8 +1523,140 @@
             </select>
           </div>
         </div>
-        <button class="btn-primary" id="btn-convertimg" onclick="convertImage()">Convert Image Format</button>
+        <button type="button" class="btn-primary" id="btn-convertimg" onclick="convertImage(event)">Convert Image Format</button>
         <div id="convertimgResult"></div>
+      </div>
+
+      <!-- 7. ROTATE PANEL -->
+      <div class="tool-panel" id="panel-rotate">
+        <div class="dropzone" id="dz-rotate" onclick="document.getElementById('rotateFile').click()">
+          <input type="file" id="rotateFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('rotate')">
+          <div class="dropzone-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6"/><path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+          </div>
+          <h4>Drop a PDF file here to rotate</h4>
+          <p>Select rotation angle and target pages</p>
+        </div>
+        <div class="file-list" id="fileList-rotate"></div>
+        <div class="options-group">
+          <div class="options-row">
+            <label for="rotateAngle">Rotation Angle:</label>
+            <select id="rotateAngle">
+              <option value="90">90° Clockwise</option>
+              <option value="180">180° Flip</option>
+              <option value="270">270° Counter-Clockwise</option>
+            </select>
+          </div>
+          <div class="options-row">
+            <label for="rotateScope">Apply To:</label>
+            <select id="rotateScope" onchange="toggleRotateCustomPages()">
+              <option value="all">All Pages</option>
+              <option value="custom">Specific Pages (e.g. 1-3, 5)</option>
+            </select>
+          </div>
+          <div class="options-row" id="rotateCustomRow" style="display: none;">
+            <label for="rotateCustomPages">Page Numbers/Ranges:</label>
+            <input type="text" id="rotateCustomPages" placeholder="e.g. 1-3, 5, 8" style="padding: 10px 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px; outline: none;">
+          </div>
+        </div>
+        <button type="button" class="btn-primary" id="btn-rotate" onclick="rotatePdf(event)">Rotate PDF Now</button>
+        <div id="rotateResult"></div>
+      </div>
+
+      <!-- 8. DELETE PAGES PANEL -->
+      <div class="tool-panel" id="panel-deletepages">
+        <div class="dropzone" id="dz-deletepages" onclick="document.getElementById('deletepagesFile').click()">
+          <input type="file" id="deletepagesFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('deletepages')">
+          <div class="dropzone-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </div>
+          <h4>Drop a PDF file here to remove pages</h4>
+          <p>Specify pages or page ranges to delete</p>
+        </div>
+        <div class="file-list" id="fileList-deletepages"></div>
+        <div class="options-group">
+          <div class="options-row">
+            <label for="pagesToDelete">Pages to Delete:</label>
+            <input type="text" id="pagesToDelete" placeholder="e.g. 2, 4, 7-10" style="padding: 10px 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px; width: 220px; outline: none;">
+          </div>
+        </div>
+        <button type="button" class="btn-primary" id="btn-deletepages" onclick="deletePdfPages(event)">Delete Specified Pages</button>
+        <div id="deletepagesResult"></div>
+      </div>
+
+      <!-- 9. WATERMARK PANEL -->
+      <div class="tool-panel" id="panel-watermark">
+        <div class="dropzone" id="dz-watermark" onclick="document.getElementById('watermarkFile').click()">
+          <input type="file" id="watermarkFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('watermark')">
+          <div class="dropzone-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h4>Drop a PDF file here to add watermark</h4>
+          <p>Add custom text watermark across all pages</p>
+        </div>
+        <div class="file-list" id="fileList-watermark"></div>
+        <div class="options-group">
+          <div class="options-row">
+            <label for="watermarkText">Watermark Text:</label>
+            <input type="text" id="watermarkText" value="CONFIDENTIAL" placeholder="e.g. DRAFT, CONFIDENTIAL" style="padding: 10px 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px; width: 220px; outline: none;">
+          </div>
+          <div class="options-row">
+            <label for="watermarkPosition">Position:</label>
+            <select id="watermarkPosition">
+              <option value="diagonal">Diagonal (45° Angle)</option>
+              <option value="center">Center (Horizontal)</option>
+            </select>
+            <label for="watermarkOpacity">Opacity:</label>
+            <select id="watermarkOpacity">
+              <option value="0.15">15% (Very Light)</option>
+              <option value="0.3" selected>30% (Standard)</option>
+              <option value="0.5">50% (Medium)</option>
+              <option value="0.8">80% (Bold)</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn-primary" id="btn-watermark" onclick="addWatermark(event)">Add Watermark to PDF</button>
+        <div id="watermarkResult"></div>
+      </div>
+
+      <!-- 10. PAGE NUMBERS PANEL -->
+      <div class="tool-panel" id="panel-pagenumbers">
+        <div class="dropzone" id="dz-pagenumbers" onclick="document.getElementById('pagenumbersFile').click()">
+          <input type="file" id="pagenumbersFile" class="file-input-hidden" onclick="event.stopPropagation()" accept="application/pdf" onchange="handleFileSelect('pagenumbers')">
+          <div class="dropzone-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/>
+              <line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/>
+            </svg>
+          </div>
+          <h4>Drop a PDF file here to add page numbers</h4>
+          <p>Stamp page numbers on every page automatically</p>
+        </div>
+        <div class="file-list" id="fileList-pagenumbers"></div>
+        <div class="options-group">
+          <div class="options-row">
+            <label for="pagenumberPosition">Position:</label>
+            <select id="pagenumberPosition">
+              <option value="bottom-center">Bottom Center</option>
+              <option value="bottom-right">Bottom Right</option>
+              <option value="top-right">Top Right</option>
+            </select>
+            <label for="pagenumberFormat">Format:</label>
+            <select id="pagenumberFormat">
+              <option value="Page {n} of {total}">Page 1 of N</option>
+              <option value="{n} / {total}">1 / N</option>
+              <option value="Page {n}">Page 1</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn-primary" id="btn-pagenumbers" onclick="addPageNumbers(event)">Add Page Numbers to PDF</button>
+        <div id="pagenumbersResult"></div>
       </div>
     </section>
 
@@ -1200,17 +1711,20 @@
         <li><a href="#workspace" onclick="switchTool('img2pdf')">Image to PDF</a></li>
         <li><a href="#workspace" onclick="switchTool('pdf2img')">PDF to Image</a></li>
         <li><a href="#workspace" onclick="switchTool('convertimg')">Image Converter</a></li>
+        <li><a href="#workspace" onclick="switchTool('rotate')">Rotate PDF</a></li>
+        <li><a href="#workspace" onclick="switchTool('deletepages')">Delete Pages</a></li>
+        <li><a href="#workspace" onclick="switchTool('watermark')">Add Watermark</a></li>
+        <li><a href="#workspace" onclick="switchTool('pagenumbers')">Page Numbers</a></li>
       </ul>
       <div>&copy; PDFCraft. Privacy Guaranteed.</div>
     </div>
   </footer>
 
   <script>
-    // Smart API origin resolution: if served on port 5500 (Live Server), direct API calls to Express on port 3000
-    const isLiveServer = window.location.port === '5500' || (window.location.hostname === '127.0.0.1' && window.location.port !== '3000');
-    const API = isLiveServer ? 'http://localhost:3000' : '';
+    // Smart API origin resolution: if not served directly on port 3000, direct API calls to Express backend on port 3000
+    const API = window.location.port === '3000' ? '' : 'http://localhost:3000';
 
-    // Mobile Navbar Helpers
+    // Navbar & Dropdown Helpers
     function toggleMobileMenu() {
       const links = document.getElementById('navLinks');
       if (links) links.classList.toggle('open');
@@ -1220,6 +1734,25 @@
       const links = document.getElementById('navLinks');
       if (links) links.classList.remove('open');
     }
+
+    function toggleToolsDropdown(e) {
+      if (e) e.stopPropagation();
+      const dropdown = document.getElementById('toolsDropdown');
+      dropdown?.classList.toggle('open');
+    }
+
+    function closeAllMenus() {
+      document.getElementById('toolsDropdown')?.classList.remove('open');
+      document.getElementById('navLinks')?.classList.remove('open');
+    }
+
+    // Close dropdown menu when clicking outside
+    window.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('toolsDropdown');
+      if (dropdown && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+      }
+    });
 
     // Smooth Scroll to Workspace
     function scrollToWorkspace() {
@@ -1245,6 +1778,13 @@
 
     function showResult(elId, html, isError = false) {
       const el = document.getElementById(elId);
+      if (!el) return;
+      if (!html) {
+        el.innerHTML = '';
+        el.style.display = 'none';
+        return;
+      }
+      el.style.display = 'block';
       el.innerHTML = `<div class="result-banner ${isError ? 'error' : 'success'}">${html}</div>`;
     }
 
@@ -1256,10 +1796,14 @@
         compress: 'Compress PDF File',
         img2pdf: 'Convert Images to PDF',
         pdf2img: 'Convert PDF to Images (PNG / JPG)',
-        convertimg: 'Convert Image Format (JPG ↔ PNG)'
+        convertimg: 'Convert Image Format (JPG ↔ PNG)',
+        rotate: 'Rotate PDF Pages',
+        deletepages: 'Delete PDF Pages',
+        watermark: 'Add Text Watermark to PDF',
+        pagenumbers: 'Add Page Numbers to PDF'
       };
 
-      const ALL_TOOLS = ['merge', 'split', 'compress', 'img2pdf', 'pdf2img', 'convertimg'];
+      const ALL_TOOLS = ['merge', 'split', 'compress', 'img2pdf', 'pdf2img', 'convertimg', 'rotate', 'deletepages', 'watermark', 'pagenumbers'];
 
       ALL_TOOLS.forEach(t => {
         document.getElementById(`tab-${t}`)?.classList.toggle('active', t === tool);
@@ -1272,15 +1816,72 @@
       scrollToWorkspace();
     }
 
-    // Handle file drag & drop & preview
+    // Toggle rotate custom pages input
+    function toggleRotateCustomPages() {
+      const scope = document.getElementById('rotateScope').value;
+      document.getElementById('rotateCustomRow').style.display = scope === 'custom' ? 'flex' : 'none';
+    }
+
+    // Merge PDF state: accumulates files instead of replacing
+    let mergeFileList = [];
+
+    function renderMergeFileList() {
+      const listEl = document.getElementById('fileList-merge');
+      const btn = document.getElementById('btn-merge');
+      if (!listEl) return;
+
+      listEl.innerHTML = '';
+      mergeFileList.forEach((file, idx) => {
+        const item = document.createElement('div');
+        item.className = 'file-item';
+        item.innerHTML = `
+          <div class="file-info">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="file-name">${file.name}</span>
+            <span class="file-size">(${formatBytes(file.size)})</span>
+          </div>
+          <button class="file-remove" onclick="removeMergeFile(${idx})" title="Remove file">✕</button>
+        `;
+        listEl.appendChild(item);
+      });
+
+      if (btn) {
+        btn.disabled = mergeFileList.length < 2;
+      }
+    }
+
+    function removeMergeFile(idx) {
+      if (idx >= 0 && idx < mergeFileList.length) {
+        mergeFileList.splice(idx, 1);
+        renderMergeFileList();
+      }
+    }
+
     function handleFileSelect(tool) {
+      const resEl = document.getElementById(`${tool}Result`);
+      if (resEl && tool !== 'merge') resEl.innerHTML = '';
+
+      if (tool === 'merge') {
+        const input = document.getElementById('mergeFiles');
+        if (input && input.files && input.files.length > 0) {
+          Array.from(input.files).forEach(f => mergeFileList.push(f));
+          input.value = ''; // Reset input value so change fires on subsequent selection
+        }
+        renderMergeFileList();
+        return;
+      }
+
       const map = {
         merge: 'mergeFiles',
         split: 'splitFile',
         compress: 'compressFile',
         img2pdf: 'img2pdfFiles',
         pdf2img: 'pdf2imgFile',
-        convertimg: 'convertimgFile'
+        convertimg: 'convertimgFile',
+        rotate: 'rotateFile',
+        deletepages: 'deletepagesFile',
+        watermark: 'watermarkFile',
+        pagenumbers: 'pagenumbersFile'
       };
       const inputId = map[tool];
       const fileListId = `fileList-${tool}`;
@@ -1307,13 +1908,26 @@
     }
 
     function clearFiles(tool) {
+      const resEl = document.getElementById(`${tool === 'img2pdf' ? 'img2pdf' : tool === 'pdf2img' ? 'pdf2img' : tool === 'convertimg' ? 'convertimg' : tool === 'deletepages' ? 'deletepages' : tool}Result`);
+      if (resEl) showResult(resEl.id, '');
+
+      if (tool === 'merge') {
+        mergeFileList = [];
+        renderMergeFileList();
+        return;
+      }
+
       const map = {
         merge: 'mergeFiles',
         split: 'splitFile',
         compress: 'compressFile',
         img2pdf: 'img2pdfFiles',
         pdf2img: 'pdf2imgFile',
-        convertimg: 'convertimgFile'
+        convertimg: 'convertimgFile',
+        rotate: 'rotateFile',
+        deletepages: 'deletepagesFile',
+        watermark: 'watermarkFile',
+        pagenumbers: 'pagenumbersFile'
       };
       const input = document.getElementById(map[tool]);
       if (input) {
@@ -1322,8 +1936,8 @@
       }
     }
 
-    // Dragover effect bindings for all 6 dropzones
-    ['dz-merge', 'dz-split', 'dz-compress', 'dz-img2pdf', 'dz-pdf2img', 'dz-convertimg'].forEach(dzId => {
+    // Dragover effect bindings for all 10 dropzones
+    ['dz-merge', 'dz-split', 'dz-compress', 'dz-img2pdf', 'dz-pdf2img', 'dz-convertimg', 'dz-rotate', 'dz-deletepages', 'dz-watermark', 'dz-pagenumbers'].forEach(dzId => {
       const dz = document.getElementById(dzId);
       if (!dz) return;
       
@@ -1344,24 +1958,33 @@
           compress: 'compressFile',
           img2pdf: 'img2pdfFiles',
           pdf2img: 'pdf2imgFile',
-          convertimg: 'convertimgFile'
+          convertimg: 'convertimgFile',
+          rotate: 'rotateFile',
+          deletepages: 'deletepagesFile',
+          watermark: 'watermarkFile',
+          pagenumbers: 'pagenumbersFile'
         };
         const input = document.getElementById(map[tool]);
-        if (dt.files && dt.files.length && input) {
-          input.files = dt.files;
-          handleFileSelect(tool);
+        if (dt.files && dt.files.length) {
+          if (tool === 'merge') {
+            Array.from(dt.files).forEach(f => mergeFileList.push(f));
+            renderMergeFileList();
+          } else if (input) {
+            input.files = dt.files;
+            handleFileSelect(tool);
+          }
         }
       });
     });
 
     // 1. MERGE PDF
-    async function mergePdfs() {
-      const input = document.getElementById('mergeFiles');
+    async function mergePdfs(e) {
+      if (e) e.preventDefault();
       const btn = document.getElementById('btn-merge');
-      if (!input.files || input.files.length < 2) return showResult('mergeResult', 'Please select at least 2 PDF files to merge.', true);
+      if (!mergeFileList || mergeFileList.length < 2) return showResult('mergeResult', 'Please select at least 2 PDF files to merge.', true);
 
       const formData = new FormData();
-      for (const f of input.files) formData.append('files', f);
+      for (const f of mergeFileList) formData.append('files', f);
 
       btn.disabled = true;
       btn.innerHTML = `<div class="spinner"></div> Merging PDFs...`;
@@ -1374,7 +1997,7 @@
 
         showResult('mergeResult', `
           <span><strong>Success!</strong> Your merged PDF is ready.</span>
-          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Merged PDF
           </a>
@@ -1382,7 +2005,7 @@
       } catch (err) {
         showResult('mergeResult', err.message, true);
       } finally {
-        btn.disabled = false;
+        btn.disabled = mergeFileList.length < 2;
         btn.innerHTML = `Merge PDFs Now`;
       }
     }
@@ -1394,7 +2017,8 @@
     }
 
     // 2. SPLIT PDF
-    async function splitPdf() {
+    async function splitPdf(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('splitFile');
       const btn = document.getElementById('btn-split');
       if (!input.files || !input.files.length) return showResult('splitResult', 'Please select a PDF file to split.', true);
@@ -1415,7 +2039,7 @@
         if (!res.ok) throw new Error(data.error);
 
         const links = data.files.map((url, i) => `
-          <a class="download-btn" href="${getDownloadUrl(url)}" download>
+          <a class="download-btn" href="${getDownloadUrl(url)}" download target="_blank" rel="noopener noreferrer">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Part ${i + 1}
           </a>
@@ -1434,7 +2058,8 @@
     }
 
     // 3. COMPRESS PDF
-    async function compressPdf() {
+    async function compressPdf(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('compressFile');
       const btn = document.getElementById('btn-compress');
       if (!input.files || !input.files.length) return showResult('compressResult', 'Please select a PDF file to compress.', true);
@@ -1456,7 +2081,7 @@
             <strong>Success!</strong> Reduced from ${(data.originalSize/1024).toFixed(0)} KB to ${(data.compressedSize/1024).toFixed(0)} KB 
             <span style="color: var(--success); font-weight:700;">(${data.savedPercent}% saved)</span>
           </div>
-          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Compressed PDF
           </a>
@@ -1470,7 +2095,8 @@
     }
 
     // 4. IMAGE TO PDF
-    async function imageToPdf() {
+    async function imageToPdf(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('img2pdfFiles');
       const btn = document.getElementById('btn-img2pdf');
       if (!input.files || input.files.length === 0) return showResult('img2pdfResult', 'Please select at least 1 image file.', true);
@@ -1489,7 +2115,7 @@
 
         showResult('img2pdfResult', `
           <span><strong>Success!</strong> Created PDF from ${input.files.length} image(s).</span>
-          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Generated PDF
           </a>
@@ -1503,7 +2129,8 @@
     }
 
     // 5. PDF TO IMAGE
-    async function pdfToImage() {
+    async function pdfToImage(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('pdf2imgFile');
       const btn = document.getElementById('btn-pdf2img');
       if (!input.files || !input.files.length) return showResult('pdf2imgResult', 'Please select a PDF file.', true);
@@ -1522,7 +2149,7 @@
         if (!res.ok) throw new Error(data.error);
 
         const links = data.files.map((url, i) => `
-          <a class="download-btn" href="${getDownloadUrl(url)}" download>
+          <a class="download-btn" href="${getDownloadUrl(url)}" download target="_blank" rel="noopener noreferrer">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Page ${i + 1}
           </a>
@@ -1541,7 +2168,8 @@
     }
 
     // 6. JPG ↔ PNG IMAGE CONVERTER
-    async function convertImage() {
+    async function convertImage(e) {
+      if (e) e.preventDefault();
       const input = document.getElementById('convertimgFile');
       const btn = document.getElementById('btn-convertimg');
       if (!input.files || !input.files.length) return showResult('convertimgResult', 'Please select an image file.', true);
@@ -1561,7 +2189,7 @@
 
         showResult('convertimgResult', `
           <span><strong>Success!</strong> Image format converted.</span>
-          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Converted Image
           </a>
@@ -1571,6 +2199,155 @@
       } finally {
         btn.disabled = false;
         btn.innerHTML = `Convert Image Format`;
+      }
+    }
+
+    // 7. ROTATE PDF
+    async function rotatePdf(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('rotateFile');
+      const btn = document.getElementById('btn-rotate');
+      if (!input.files || !input.files.length) return showResult('rotateResult', 'Please select a PDF file to rotate.', true);
+
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+      formData.append('angle', document.getElementById('rotateAngle').value);
+      formData.append('pageScope', document.getElementById('rotateScope').value);
+      formData.append('customPages', document.getElementById('rotateCustomPages').value);
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Rotating PDF...`;
+      showResult('rotateResult', 'Rotating your PDF document...');
+
+      try {
+        const res = await fetch(`${API}/api/rotate`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        showResult('rotateResult', `
+          <span><strong>Success!</strong> Your rotated PDF is ready.</span>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Rotated PDF
+          </a>
+        `);
+      } catch (err) {
+        showResult('rotateResult', err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Rotate PDF Now`;
+      }
+    }
+
+    // 8. DELETE PAGES
+    async function deletePdfPages(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('deletepagesFile');
+      const btn = document.getElementById('btn-deletepages');
+      const pagesToDelete = document.getElementById('pagesToDelete').value;
+      if (!input.files || !input.files.length) return showResult('deletepagesResult', 'Please select a PDF file.', true);
+      if (!pagesToDelete.trim()) return showResult('deletepagesResult', 'Please enter page numbers to delete (e.g. 2, 4, 7-10).', true);
+
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+      formData.append('pagesToDelete', pagesToDelete);
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Deleting Pages...`;
+      showResult('deletepagesResult', 'Removing pages from PDF...');
+
+      try {
+        const res = await fetch(`${API}/api/delete-pages`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        showResult('deletepagesResult', `
+          <div><strong>Success!</strong> Deleted ${data.deletedCount} page(s) (${data.remainingPages} remaining).</div>
+          <a class="download-btn" style="margin-top: 6px;" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Processed PDF
+          </a>
+        `);
+      } catch (err) {
+        showResult('deletepagesResult', err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Delete Specified Pages`;
+      }
+    }
+
+    // 9. ADD WATERMARK
+    async function addWatermark(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('watermarkFile');
+      const btn = document.getElementById('btn-watermark');
+      const text = document.getElementById('watermarkText').value;
+      if (!input.files || !input.files.length) return showResult('watermarkResult', 'Please select a PDF file.', true);
+      if (!text.trim()) return showResult('watermarkResult', 'Please enter watermark text.', true);
+
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+      formData.append('text', text);
+      formData.append('position', document.getElementById('watermarkPosition').value);
+      formData.append('opacity', document.getElementById('watermarkOpacity').value);
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Applying Watermark...`;
+      showResult('watermarkResult', 'Adding watermark to PDF...');
+
+      try {
+        const res = await fetch(`${API}/api/watermark`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        showResult('watermarkResult', `
+          <span><strong>Success!</strong> Watermark added to your PDF.</span>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Watermarked PDF
+          </a>
+        `);
+      } catch (err) {
+        showResult('watermarkResult', err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Add Watermark to PDF`;
+      }
+    }
+
+    // 10. ADD PAGE NUMBERS
+    async function addPageNumbers(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('pagenumbersFile');
+      const btn = document.getElementById('btn-pagenumbers');
+      if (!input.files || !input.files.length) return showResult('pagenumbersResult', 'Please select a PDF file.', true);
+
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+      formData.append('position', document.getElementById('pagenumberPosition').value);
+      formData.append('format', document.getElementById('pagenumberFormat').value);
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Stamping Page Numbers...`;
+      showResult('pagenumbersResult', 'Adding page numbers to PDF...');
+
+      try {
+        const res = await fetch(`${API}/api/page-numbers`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        showResult('pagenumbersResult', `
+          <span><strong>Success!</strong> Page numbers added to your PDF.</span>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Numbered PDF
+          </a>
+        `);
+      } catch (err) {
+        showResult('pagenumbersResult', err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Add Page Numbers to PDF`;
       }
     }
   </script>

@@ -5,7 +5,26 @@ const path = require('path');
 const fs = require('fs');
 const { PDFDocument, degrees, StandardFonts, rgb } = require('pdf-lib');
 const sharp = require('sharp');
-const pdfImgConvert = require('pdf-img-convert');
+const { createCanvas } = require('@napi-rs/canvas');
+const pdfjs = require('pdfjs-dist/legacy/build/pdf.js');
+
+class NodeCanvasFactory {
+  create(width, height) {
+    const canvas = createCanvas(width, height);
+    const context = canvas.getContext('2d');
+    return { canvas, context };
+  }
+  reset(canvasAndContext, width, height) {
+    canvasAndContext.canvas.width = width;
+    canvasAndContext.canvas.height = height;
+  }
+  destroy(canvasAndContext) {
+    canvasAndContext.canvas.width = 0;
+    canvasAndContext.canvas.height = 0;
+    canvasAndContext.canvas = null;
+    canvasAndContext.context = null;
+  }
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -249,20 +268,37 @@ app.post('/api/pdf-to-image', upload.single('file'), async (req, res) => {
 
     const format = (req.body.format || 'png').toLowerCase(); // 'png' or 'jpg'
 
-    // pdf-img-convert renders array of image buffers (Uint8Array)
-    const outputImages = await pdfImgConvert.convert(uploadedFile.path, {
-      outputType: 'png'
+    const data = new Uint8Array(fs.readFileSync(uploadedFile.path));
+    const loadingTask = pdfjs.getDocument({
+      data,
+      disableFontFace: true,
+      verbosity: 0
     });
-
+    const pdfDoc = await loadingTask.promise;
+    const totalPages = pdfDoc.numPages;
     const outputFiles = [];
-    for (let i = 0; i < outputImages.length; i++) {
-      let imgBuffer = Buffer.from(outputImages[i]);
+
+    for (let i = 1; i <= totalPages; i++) {
+      const page = await pdfDoc.getPage(i);
+      const viewport = page.getViewport({ scale: 2.0 });
+      const canvasFactory = new NodeCanvasFactory();
+      const canvasAndContext = canvasFactory.create(viewport.width, viewport.height);
+
+      const renderContext = {
+        canvasContext: canvasAndContext.context,
+        viewport,
+        canvasFactory
+      };
+
+      await page.render(renderContext).promise;
+      let imgBuffer = canvasAndContext.canvas.toBuffer('image/png');
+
       if (format === 'jpg' || format === 'jpeg') {
         imgBuffer = await sharp(imgBuffer).jpeg({ quality: 90 }).toBuffer();
       }
 
-      const ext = format === 'jpg' ? 'jpg' : 'png';
-      const filename = `pdf-page-${i + 1}-${Date.now()}.${ext}`;
+      const ext = (format === 'jpg' || format === 'jpeg') ? 'jpg' : 'png';
+      const filename = `pdf-page-${i}-${Date.now()}.${ext}`;
       const outPath = path.join(OUTPUT_DIR, filename);
       fs.writeFileSync(outPath, imgBuffer);
       scheduleDelete(outPath);
@@ -270,7 +306,7 @@ app.post('/api/pdf-to-image', upload.single('file'), async (req, res) => {
     }
 
     fs.unlink(uploadedFile.path, () => {});
-    res.json({ success: true, files: outputFiles, totalPages: outputImages.length });
+    res.json({ success: true, files: outputFiles, totalPages });
   } catch (err) {
     console.error(err);
     if (uploadedFile) fs.unlink(uploadedFile.path, () => {});
@@ -314,7 +350,10 @@ app.post('/api/convert-image', upload.single('file'), async (req, res) => {
     console.error(err);
     if (uploadedFile) fs.unlink(uploadedFile.path, () => {});
     res.status(500).json({ error: 'Failed to convert image format: ' + err.message });
-  // ---- Helper: parse page string like "1-3, 5, 7-9" into Set of 0-based page indices ----
+  }
+});
+
+// ---- Helper: parse page string like "1-3, 5, 7-9" into Set of 0-based page indices ----
 function parsePageIndices(inputStr, totalPages) {
   if (!inputStr || typeof inputStr !== 'string') return new Set();
   const indices = new Set();

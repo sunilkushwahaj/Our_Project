@@ -1,0 +1,9 @@
+uploads/
+outputs/
+**/uploads/**
+**/outputs/**
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.webp
