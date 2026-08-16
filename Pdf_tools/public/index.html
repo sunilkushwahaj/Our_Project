@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDFCraft — Free PDF & Image Tools: Merge, Split, Compress & Convert Online</title>
+<meta name="description" content="Free online PDF and image tools. Merge PDFs, split pages, compress PDF size, convert images to PDF, convert PDF pages to images (PNG/JPG), and convert image formats. Fast, private, auto-deleted after 1 hour. No login required.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-light: #eef2ff;
+    --dark: #0f172a;
+    --slate-700: #334155;
+    --slate-600: #475569;
+    --slate-500: #64748b;
+    --slate-200: #e2e8f0;
+    --slate-100: #f1f5f9;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --success: #059669;
+    --success-bg: #ecfdf5;
+    --success-border: #a7f3d0;
+    --error: #dc2626;
+    --error-bg: #fef2f2;
+    --error-border: #fecaca;
+    --radius: 14px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header Navigation */
+  header {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--slate-200);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  
+  .nav-container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--dark);
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--primary), #818cf8);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+  }
+
+  /* Mobile Hamburger Toggle Button */
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--slate-700);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+  .mobile-menu-btn:hover {
+    background: var(--slate-100);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--slate-600);
+    font-weight: 500;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: var(--primary);
+  }
+
+  .badge-free {
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #c7d2fe;
+  }
+
+  /* Responsive Mobile Navigation */
+  @media (max-width: 768px) {
+    .mobile-menu-btn {
+      display: block;
+    }
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      flex-direction: column;
+      padding: 18px 24px;
+      gap: 14px;
+      border-bottom: 1px solid var(--slate-200);
+      box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+      align-items: flex-start;
+    }
+    .nav-links.open {
+      display: flex;
+    }
+  }
+
+  /* Hero Section */
+  .hero {
+    padding: 68px 24px 48px;
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto 36px;
+    background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.12) 0%, rgba(248, 250, 252, 0) 70%), linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
+    border-radius: 0 0 28px 28px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 1px solid #dbeafe;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 24px;
+    box-shadow: 0 2px 5px rgba(79, 70, 229, 0.08);
+  }
+
+  .hero h1 {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    color: var(--dark);
+    margin-bottom: 18px;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: var(--slate-600);
+    margin-bottom: 28px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Prominent Hero CTA Button */
+  .hero-cta-wrapper {
+    margin-bottom: 28px;
+  }
+
+  .hero-cta-btn {
+    background: linear-gradient(135deg, var(--primary) 0%, #4338ca 100%);
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    padding: 14px 32px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hero-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 24px -5px rgba(79, 70, 229, 0.5);
+    background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+  }
+
+  .hero-cta-btn svg {
+    transition: transform 0.2s;
+  }
+  .hero-cta-btn:hover svg {
+    transform: translateY(2px);
+  }
+
+  .hero-features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px;
+    font-size: 13px;
+    color: var(--slate-600);
+    font-weight: 500;
+  }
+
+  .hero-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--slate-200);
+  }
+
+  .hero-feature-item svg {
+    color: var(--success);
+  }
+
+  /* Main Container */
+  main {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px 64px;
+    width: 100%;
+    flex: 1;
+  }
+
+  /* Tool Cards Grid - 6 Tools */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .tool-card {
+    border-radius: var(--radius);
+    padding: 26px;
+    box-shadow: var(--shadow);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  /* Distinct Soft Background Tints for 6 Tool Cards */
+  .tool-card#card-merge {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ffffff 100%);
+    border: 1px solid #ddd6fe;
+  }
+  .tool-card#card-merge:hover, .tool-card#card-merge.active {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 25px -5px rgba(124, 58, 237, 0.12);
+    border-color: #7c3aed;
+  }
+
+  .tool-card#card-split {
+    background: linear-gradient(135deg, #fff1f2 0%, #ffffff 100%);
+    border: 1px solid #fecdd3;
+  }
+  .tool-card#card-split:hover, .tool-card#card-split.active {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 25px -5px rgba(225, 29, 72, 0.12);
+    border-color: #e11d48;
+  }
+
+  .tool-card#card-compress {
+    background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%);
+    border: 1px solid #a7f3d0;
+  }
+  .tool-card#card-compress:hover, .tool-card#card-compress.active {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.12);
+    border-color: #10b981;
+  }
+
+  .tool-card#card-img2pdf {
+    background: linear-gradient(135deg, #fffbe6 0%, #ffffff 100%);
+    border: 1px solid #fde68a;
+  }
+  .tool-card#card-img2pdf:hover, .tool-card#card-img2pdf.active {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 25px -5px rgba(217, 119, 6, 0.12);
+    border-color: #d97706;
+  }
+
+  .tool-card#card-pdf2img {
+    background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+    border: 1px solid #bae6fd;
+  }
+  .tool-card#card-pdf2img:hover, .tool-card#card-pdf2img.active {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 25px -5px rgba(2, 132, 199, 0.12);
+    border-color: #0284c7;
+  }
+
+  .tool-card#card-convertimg {
+    background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 100%);
+    border: 1px solid #99f6e4;
+  }
+  .tool-card#card-convertimg:hover, .tool-card#card-convertimg.active {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 25px -5px rgba(13, 148, 136, 0.12);
+    border-color: #0d9488;
+  }
+
+  .tool-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .tool-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+  .tool-icon.merge-icon { background: #ede9fe; color: #6d28d9; }
+  .tool-icon.split-icon { background: #ffe4e6; color: #e11d48; }
+  .tool-icon.compress-icon { background: #d1fae5; color: #047857; }
+  .tool-icon.img2pdf-icon { background: #fef3c7; color: #d97706; }
+  .tool-icon.pdf2img-icon { background: #e0f2fe; color: #0284c7; }
+  .tool-icon.convertimg-icon { background: #ccfbf1; color: #0d9488; }
+
+  .tool-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+
+  .tool-card p {
+    font-size: 14px;
+    color: var(--slate-600);
+    margin-bottom: 20px;
+  }
+
+  .tool-card-action {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  #card-merge .tool-card-action { color: #6d28d9; }
+  #card-split .tool-card-action { color: #e11d48; }
+  #card-compress .tool-card-action { color: #047857; }
+  #card-img2pdf .tool-card-action { color: #d97706; }
+  #card-pdf2img .tool-card-action { color: #0284c7; }
+  #card-convertimg .tool-card-action { color: #0d9488; }
+
+  /* Interactive Workspace Section */
+  .workspace-section {
+    background: var(--card-bg);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius);
+    padding: 36px;
+    box-shadow: var(--shadow-lg);
+    scroll-margin-top: 100px;
+  }
+
+  .workspace-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--slate-200);
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .workspace-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .workspace-title h2 {
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .tool-tabs {
+    display: flex;
+    background: var(--slate-100);
+    padding: 4px;
+    border-radius: 10px;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    border: none;
+    background: transparent;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--slate-600);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active {
+    background: white;
+    color: var(--primary);
+    box-shadow: var(--shadow);
+  }
+
+  .tool-panel {
+    display: none;
+  }
+
+  .tool-panel.active {
+    display: block;
+  }
+
+  /* Dropzone Styling */
+  .dropzone {
+    border: 2px dashed #cbd5e1;
+    border-radius: var(--radius);
+    padding: 44px 24px;
+    text-align: center;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  .dropzone-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 16px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.12);
+  }
+
+  .dropzone h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+
+  .dropzone p {
+    font-size: 13px;
+    color: var(--slate-500);
+  }
+
+  .file-input-hidden {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  /* Selected Files List */
+  .file-list {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--slate-100);
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    border: 1px solid var(--slate-200);
+  }
+
+  .file-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+  }
+
+  .file-name {
+    font-weight: 600;
+    color: var(--dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .file-size {
+    color: var(--slate-500);
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .file-remove {
+    color: var(--slate-500);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+    border-radius: 4px;
+  }
+  .file-remove:hover { color: var(--error); }
+
+  /* Tool Controls */
+  .options-group {
+    background: var(--slate-100);
+    padding: 18px 22px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border: 1px solid var(--slate-200);
+  }
+
+  .options-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .options-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--slate-700);
+  }
+
+  select, input[type="number"] {
+    padding: 10px 14px;
+    border: 1px solid var(--slate-200);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: white;
+    color: var(--dark);
+    outline: none;
+  }
+
+  select:focus, input[type="number"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  }
+
+  input[type="number"] {
+    width: 90px;
+  }
+
+  /* Action Buttons */
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s, transform 0.1s;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-hover);
+  }
+
+  .btn-primary:disabled {
+    background: #94a3b8;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  /* Results / Feedback Banners */
+  .result-banner {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .result-banner.success {
+    background: var(--success-bg);
+    border: 1px solid var(--success-border);
+    color: #065f46;
+  }
+
+  .result-banner.error {
+    background: var(--error-bg);
+    border: 1px solid var(--error-border);
+    color: #991b1b;
+  }
+
+  .download-btn {
+    background: var(--success);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+    box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+  }
+
+  .download-btn:hover {
+    background: #047857;
+  }
+
+  .download-links-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* Spinner */
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Why Us / Trust Section */
+  .features-section {
+    margin-top: 64px;
+  }
+
+  .features-section h2 {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 36px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .feature-card {
+    background: white;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius);
+    padding: 26px;
+    box-shadow: var(--shadow);
+  }
+
+  /* Distinct Colors for Feature Icons */
+  .feature-card:nth-child(1) .feature-icon { background: #dbeafe; color: #2563eb; }
+  .feature-card:nth-child(2) .feature-icon { background: #f3e8ff; color: #7c3aed; }
+  .feature-card:nth-child(3) .feature-icon { background: #dcfce7; color: #16a34a; }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .feature-card h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .feature-card p { font-size: 14px; color: var(--slate-600); }
+
+  /* Footer */
+  footer {
+    background: var(--dark);
+    color: var(--slate-500);
+    padding: 44px 24px;
+    margin-top: auto;
+    font-size: 14px;
+  }
+
+  .footer-container {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .footer-brand { color: white; font-weight: 700; }
+  
+  /* 3-Column Grid for Footer Tools List (2 rows x 3 columns) */
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 12px 28px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    color: var(--slate-400);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover {
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .footer-container { flex-direction: column; text-align: center; }
+    .footer-links { grid-template-columns: repeat(2, auto); justify-content: center; }
+  }
+
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 32px; }
+    .hero p { font-size: 15px; }
+    .workspace-section { padding: 22px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </div>
+        PDFCraft
+      </a>
+      
+      <!-- Mobile Hamburger Toggle Button -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#workspace" onclick="switchTool('merge'); closeMobileMenu();">Merge</a></li>
+        <li><a href="#workspace" onclick="switchTool('split'); closeMobileMenu();">Split</a></li>
+        <li><a href="#workspace" onclick="switchTool('compress'); closeMobileMenu();">Compress</a></li>
+        <li><a href="#workspace" onclick="switchTool('img2pdf'); closeMobileMenu();">Image to PDF</a></li>
+        <li><a href="#workspace" onclick="switchTool('pdf2img'); closeMobileMenu();">PDF to Image</a></li>
+        <li><a href="#workspace" onclick="switchTool('convertimg'); closeMobileMenu();">Image Converter</a></li>
+        <li><span class="badge-free">100% Free</span></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-pill">
+      <span>✨ 6 Fast, Free & Private PDF/Image Tools</span>
+    </div>
+    <h1>Free PDF & Image Tools — <span>Convert, Merge & Split</span> Online</h1>
+    <p>Every tool you need for PDFs & images in one place. Fast conversion, no software installation, and auto-deleted after 1 hour.</p>
+
+    <!-- Hero CTA Button -->
+    <div class="hero-cta-wrapper">
+      <button class="hero-cta-btn" onclick="scrollToWorkspace()">
+        Choose a Tool
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <div class="hero-features">
+      <div class="hero-feature-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        No Registration Required
+      </div>
+      <div class="hero-feature-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        100% Private & Auto-Deleted
+      </div>
+      <div class="hero-feature-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Works on Any Device
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Tool Cards Grid - 6 Tools -->
+    <div class="tools-grid">
+      <!-- 1. Merge Card -->
+      <div class="tool-card active" onclick="switchTool('merge')" id="card-merge">
+        <div>
+          <div class="tool-card-header">
+            <div class="tool-icon merge-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M8 7h11"/><path d="M8 12h11"/><path d="M8 17h11"/>
+                <rect x="3" y="5" width="2" height="14" rx="1"/>
+              </svg>
+            </div>
+            <h3>Merge PDF</h3>
+          </div>
+          <p>Combine multiple PDF documents into a single organized file in seconds.</p>
+        </div>
+        <div class="tool-card-action">Select Tool →</div>
+      </div>
+
+      <!-- 2. Split Card -->
+      <div class="tool-card" onclick="switchTool('split')" id="card-split">
+        <div>
+          <div class="tool-card-header">
+            <div class="tool-icon split-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+                <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+                <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+                <line x1="8.12" y1="8.12" x2="12" y2="12"/>
+              </svg>
+            </div>
+            <h3>Split PDF</h3>
+          </div>
+          <p>Extract specific page ranges or split every page into separate PDF files.</p>
+        </div>
+        <div class="tool-card-action">Select Tool →</div>
+      </div>
+
+      <!-- 3. Compress Card -->
+      <div class="tool-card" onclick="switchTool('compress')" id="card-compress">
+        <div>
+          <div class="tool-card-header">
+            <div class="tool-icon compress-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="M14 10l7-7"/><path d="M3 21l7-7"/>
+              </svg>
+            </div>
+            <h3>Compress PDF</h3>
+          </div>
+          <p>Reduce PDF file size while maintaining optimum visual document quality.</p>
+        </div>
+        <div class="tool-card-action">Select Tool →</div>
+      </div>
+
+      <!-- 4. Image to PDF Card -->
+      <div class="tool-card" onclick="switchTool('img2pdf')" id="card-img2pdf">
+        <div>
+          <div class="tool-card-header">
+            <div class="tool-icon img2pdf-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            <h3>Image to PDF</h3>
+          </div>
+          <p>Convert JPG, PNG, or WebP images into a clean single PDF document.</p>
+        </div>
+        <div class="tool-card-action">Select Tool →</div>
+      </div>
+
+      <!-- 5. PDF to Image Card -->
+      <div class="tool-card" onclick="switchTool('pdf2img')" id="card-pdf2img">
+        <div>
+          <div class="tool-card-header">
+            <div class="tool-icon pdf2img-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+            </div>
+            <h3>PDF to Image</h3>
+          </div>
+          <p>Extract all PDF pages as standalone high-quality PNG or JPG images.</p>
+        </div>
+        <div class="tool-card-action">Select Tool →</div>
+      </div>
+
+      <!-- 6. Image Converter Card -->
+      <div class="tool-card" onclick="switchTool('convertimg')" id="card-convertimg">
+        <div>
+          <div class="tool-card-header">
+            <div class="tool-icon convertimg-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="17 1 21 5 17 9"/>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                <polyline points="7 23 3 19 7 15"/>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+              </svg>
+            </div>
+            <h3>JPG ↔ PNG Converter</h3>
+          </div>
+          <p>Fast format conversion between JPG, PNG, and WebP images.</p>
+        </div>
+        <div class="tool-card-action">Select Tool →</div>
+      </div>
+    </div>
+
+    <!-- Interactive Workspace Panel -->
+    <section class="workspace-section" id="workspace">
+      <div class="workspace-header">
+        <div class="workspace-title">
+          <h2 id="workspaceTitle">Merge PDF Documents</h2>
+        </div>
+        <div class="tool-tabs">
+          <button class="tab-btn active" id="tab-merge" onclick="switchTool('merge')">Merge</button>
+          <button class="tab-btn" id="tab-split" onclick="switchTool('split')">Split</button>
+          <button class="tab-btn" id="tab-compress" onclick="switchTool('compress')">Compress</button>
+          <button class="tab-btn" id="tab-img2pdf" onclick="switchTool('img2pdf')">Image to PDF</button>
+          <button class="tab-btn" id="tab-pdf2img" onclick="switchTool('pdf2img')">PDF to Image</button>
+          <button class="tab-btn" id="tab-convertimg" onclick="switchTool('convertimg')">Image Converter</button>
+        </div>
+      </div>
+
+      <!-- 1. MERGE PANEL -->
+      <div class="tool-panel active" id="panel-merge">
+        <div class="dropzone" id="dz-merge" onclick="document.getElementById('mergeFiles').click()">
+          <input type="file" id="mergeFiles" class="file-input-hidden" accept="application/pdf" multiple onchange="handleFileSelect('merge')">
+          <div class="dropzone-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <h4>Drop PDF files here, or click to browse</h4>
+          <p>Select 2 or more PDF files (Up to 50MB per file)</p>
+        </div>
+        <div class="file-list" id="fileList-merge"></div>
+        <button class="btn-primary" id="btn-merge" onclick="mergePdfs()">Merge PDFs Now</button>
+        <div id="mergeResult"></div>
+      </div>
+
+      <!-- 2. SPLIT PANEL -->
+      <div class="tool-panel" id="panel-split">
+        <div class="dropzone" id="dz-split" onclick="document.getElementById('splitFile').click()">
+          <input type="file" id="splitFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('split')">
+          <div class="dropzone-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <h4>Drop a PDF file here, or click to browse</h4>
+          <p>Upload a single PDF to extract page ranges or split all pages</p>
+        </div>
+        <div class="file-list" id="fileList-split"></div>
+        <div class="options-group">
+          <div class="options-row">
+            <label for="splitMode">Split Mode:</label>
+            <select id="splitMode" onchange="toggleSplitRange()">
+              <option value="range">Extract custom page range</option>
+              <option value="all">Split every page into separate files</option>
+            </select>
+          </div>
+          <div class="options-row" id="rangeInputs">
+            <label>From Page: <input type="number" id="startPage" value="1" min="1"></label>
+            <label>To Page: <input type="number" id="endPage" value="1" min="1"></label>
+          </div>
+        </div>
+        <button class="btn-primary" id="btn-split" onclick="splitPdf()">Split PDF Now</button>
+        <div id="splitResult"></div>
+      </div>
+
+      <!-- 3. COMPRESS PANEL -->
+      <div class="tool-panel" id="panel-compress">
+        <div class="dropzone" id="dz-compress" onclick="document.getElementById('compressFile').click()">
+          <input type="file" id="compressFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('compress')">
+          <div class="dropzone-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <h4>Drop a PDF file here to compress</h4>
+          <p>Optimize document structure and shrink file size</p>
+        </div>
+        <div class="file-list" id="fileList-compress"></div>
+        <button class="btn-primary" id="btn-compress" onclick="compressPdf()">Compress PDF Now</button>
+        <div id="compressResult"></div>
+      </div>
+
+      <!-- 4. IMAGE TO PDF PANEL -->
+      <div class="tool-panel" id="panel-img2pdf">
+        <div class="dropzone" id="dz-img2pdf" onclick="document.getElementById('img2pdfFiles').click()">
+          <input type="file" id="img2pdfFiles" class="file-input-hidden" accept="image/jpeg,image/png,image/webp" multiple onchange="handleFileSelect('img2pdf')">
+          <div class="dropzone-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+            </svg>
+          </div>
+          <h4>Drop image files here (JPG, PNG, WebP)</h4>
+          <p>Select 1 or more images to combine into a single PDF document</p>
+        </div>
+        <div class="file-list" id="fileList-img2pdf"></div>
+        <button class="btn-primary" id="btn-img2pdf" onclick="imageToPdf()">Convert Images to PDF</button>
+        <div id="img2pdfResult"></div>
+      </div>
+
+      <!-- 5. PDF TO IMAGE PANEL -->
+      <div class="tool-panel" id="panel-pdf2img">
+        <div class="dropzone" id="dz-pdf2img" onclick="document.getElementById('pdf2imgFile').click()">
+          <input type="file" id="pdf2imgFile" class="file-input-hidden" accept="application/pdf" onchange="handleFileSelect('pdf2img')">
+          <div class="dropzone-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+            </svg>
+          </div>
+          <h4>Drop a PDF file here to extract pages as images</h4>
+          <p>Convert each page of your PDF file into a separate PNG or JPG image</p>
+        </div>
+        <div class="file-list" id="fileList-pdf2img"></div>
+        <div class="options-group">
+          <div class="options-row">
+            <label for="pdf2imgFormat">Output Format:</label>
+            <select id="pdf2imgFormat">
+              <option value="png">PNG (High Quality / Transparent)</option>
+              <option value="jpg">JPG (Smaller File Size)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-primary" id="btn-pdf2img" onclick="pdfToImage()">Convert PDF to Images</button>
+        <div id="pdf2imgResult"></div>
+      </div>
+
+      <!-- 6. IMAGE CONVERTER PANEL -->
+      <div class="tool-panel" id="panel-convertimg">
+        <div class="dropzone" id="dz-convertimg" onclick="document.getElementById('convertimgFile').click()">
+          <input type="file" id="convertimgFile" class="file-input-hidden" accept="image/jpeg,image/png,image/webp" onchange="handleFileSelect('convertimg')">
+          <div class="dropzone-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+              <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+            </svg>
+          </div>
+          <h4>Drop an image file here to convert format</h4>
+          <p>Convert JPG to PNG, PNG to JPG, or convert images to WebP</p>
+        </div>
+        <div class="file-list" id="fileList-convertimg"></div>
+        <div class="options-group">
+          <div class="options-row">
+            <label for="convertimgTarget">Convert to Format:</label>
+            <select id="convertimgTarget">
+              <option value="png">PNG Image (.png)</option>
+              <option value="jpg">JPG Image (.jpg)</option>
+              <option value="webp">WebP Image (.webp)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-primary" id="btn-convertimg" onclick="convertImage()">Convert Image Format</button>
+        <div id="convertimgResult"></div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us / Security -->
+    <section class="features-section">
+      <h2>Why use PDFCraft?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <h4>100% Secure & Private</h4>
+          <p>Your privacy matters. All uploaded documents are automatically deleted from server memory after 1 hour.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <h4>Lightning Fast Processing</h4>
+          <p>Processing happens in real-time. No waiting queues or registration speed caps.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <h4>Works on Any Device</h4>
+          <p>Fully browser-based. Works seamless across desktop computers, tablets, and smartphones.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-brand">PDFCraft — Free Online PDF Utilities</div>
+      <ul class="footer-links">
+        <li><a href="#workspace" onclick="switchTool('merge')">Merge PDF</a></li>
+        <li><a href="#workspace" onclick="switchTool('split')">Split PDF</a></li>
+        <li><a href="#workspace" onclick="switchTool('compress')">Compress PDF</a></li>
+        <li><a href="#workspace" onclick="switchTool('img2pdf')">Image to PDF</a></li>
+        <li><a href="#workspace" onclick="switchTool('pdf2img')">PDF to Image</a></li>
+        <li><a href="#workspace" onclick="switchTool('convertimg')">Image Converter</a></li>
+      </ul>
+      <div>&copy; PDFCraft. Privacy Guaranteed.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Smart API origin resolution: if served on port 5500 (Live Server), direct API calls to Express on port 3000
+    const isLiveServer = window.location.port === '5500' || (window.location.hostname === '127.0.0.1' && window.location.port !== '3000');
+    const API = isLiveServer ? 'http://localhost:3000' : '';
+
+    // Mobile Navbar Helpers
+    function toggleMobileMenu() {
+      const links = document.getElementById('navLinks');
+      if (links) links.classList.toggle('open');
+    }
+
+    function closeMobileMenu() {
+      const links = document.getElementById('navLinks');
+      if (links) links.classList.remove('open');
+    }
+
+    // Smooth Scroll to Workspace
+    function scrollToWorkspace() {
+      const ws = document.getElementById('workspace');
+      if (ws) {
+        ws.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // Format Bytes helper
+    function formatBytes(bytes) {
+      if (!bytes || bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function getDownloadUrl(path) {
+      if (!path) return '';
+      return path.startsWith('http') ? path : `${API}${path}`;
+    }
+
+    function showResult(elId, html, isError = false) {
+      const el = document.getElementById(elId);
+      el.innerHTML = `<div class="result-banner ${isError ? 'error' : 'success'}">${html}</div>`;
+    }
+
+    // Switch tool tab & panel
+    function switchTool(tool) {
+      const titles = {
+        merge: 'Merge PDF Documents',
+        split: 'Split PDF Pages',
+        compress: 'Compress PDF File',
+        img2pdf: 'Convert Images to PDF',
+        pdf2img: 'Convert PDF to Images (PNG / JPG)',
+        convertimg: 'Convert Image Format (JPG ↔ PNG)'
+      };
+
+      const ALL_TOOLS = ['merge', 'split', 'compress', 'img2pdf', 'pdf2img', 'convertimg'];
+
+      ALL_TOOLS.forEach(t => {
+        document.getElementById(`tab-${t}`)?.classList.toggle('active', t === tool);
+        document.getElementById(`panel-${t}`)?.classList.toggle('active', t === tool);
+        document.getElementById(`card-${t}`)?.classList.toggle('active', t === tool);
+      });
+
+      document.getElementById('workspaceTitle').innerText = titles[tool] || 'PDF Tool';
+      
+      scrollToWorkspace();
+    }
+
+    // Handle file drag & drop & preview
+    function handleFileSelect(tool) {
+      const map = {
+        merge: 'mergeFiles',
+        split: 'splitFile',
+        compress: 'compressFile',
+        img2pdf: 'img2pdfFiles',
+        pdf2img: 'pdf2imgFile',
+        convertimg: 'convertimgFile'
+      };
+      const inputId = map[tool];
+      const fileListId = `fileList-${tool}`;
+      const input = document.getElementById(inputId);
+      const listEl = document.getElementById(fileListId);
+      
+      if (!listEl || !input) return;
+      listEl.innerHTML = '';
+      if (!input.files || input.files.length === 0) return;
+
+      Array.from(input.files).forEach((file) => {
+        const item = document.createElement('div');
+        item.className = 'file-item';
+        item.innerHTML = `
+          <div class="file-info">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="file-name">${file.name}</span>
+            <span class="file-size">(${formatBytes(file.size)})</span>
+          </div>
+          <button class="file-remove" onclick="clearFiles('${tool}')" title="Remove">✕</button>
+        `;
+        listEl.appendChild(item);
+      });
+    }
+
+    function clearFiles(tool) {
+      const map = {
+        merge: 'mergeFiles',
+        split: 'splitFile',
+        compress: 'compressFile',
+        img2pdf: 'img2pdfFiles',
+        pdf2img: 'pdf2imgFile',
+        convertimg: 'convertimgFile'
+      };
+      const input = document.getElementById(map[tool]);
+      if (input) {
+        input.value = '';
+        handleFileSelect(tool);
+      }
+    }
+
+    // Dragover effect bindings for all 6 dropzones
+    ['dz-merge', 'dz-split', 'dz-compress', 'dz-img2pdf', 'dz-pdf2img', 'dz-convertimg'].forEach(dzId => {
+      const dz = document.getElementById(dzId);
+      if (!dz) return;
+      
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dz.addEventListener(eventName, (e) => { e.preventDefault(); dz.classList.add('dragover'); }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dz.addEventListener(eventName, (e) => { e.preventDefault(); dz.classList.remove('dragover'); }, false);
+      });
+
+      dz.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const tool = dzId.replace('dz-', '');
+        const map = {
+          merge: 'mergeFiles',
+          split: 'splitFile',
+          compress: 'compressFile',
+          img2pdf: 'img2pdfFiles',
+          pdf2img: 'pdf2imgFile',
+          convertimg: 'convertimgFile'
+        };
+        const input = document.getElementById(map[tool]);
+        if (dt.files && dt.files.length && input) {
+          input.files = dt.files;
+          handleFileSelect(tool);
+        }
+      });
+    });
+
+    // 1. MERGE PDF
+    async function mergePdfs() {
+      const input = document.getElementById('mergeFiles');
+      const btn = document.getElementById('btn-merge');
+      if (!input.files || input.files.length < 2) return showResult('mergeResult', 'Please select at least 2 PDF files to merge.', true);
+
+      const formData = new FormData();
+      for (const f of input.files) formData.append('files', f);
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Merging PDFs...`;
+      showResult('mergeResult', 'Merging your PDF documents...');
+
+      try {
+        const res = await fetch(`${API}/api/merge`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        showResult('mergeResult', `
+          <span><strong>Success!</strong> Your merged PDF is ready.</span>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Merged PDF
+          </a>
+        `);
+      } catch (err) {
+        showResult('mergeResult', err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Merge PDFs Now`;
+      }
+    }
+
+    // Toggle split range UI
+    function toggleSplitRange() {
+      const mode = document.getElementById('splitMode').value;
+      document.getElementById('rangeInputs').style.display = mode === 'range' ? 'flex' : 'none';
+    }
+
+    // 2. SPLIT PDF
+    async function splitPdf() {
+      const input = document.getElementById('splitFile');
+      const btn = document.getElementById('btn-split');
+      if (!input.files || !input.files.length) return showResult('splitResult', 'Please select a PDF file to split.', true);
+
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+      formData.append('mode', document.getElementById('splitMode').value);
+      formData.append('startPage', document.getElementById('startPage').value);
+      formData.append('endPage', document.getElementById('endPage').value);
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Splitting PDF...`;
+      showResult('splitResult', 'Splitting your PDF document...');
+
+      try {
+        const res = await fetch(`${API}/api/split`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        const links = data.files.map((url, i) => `
+          <a class="download-btn" href="${getDownloadUrl(url)}" download>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Part ${i + 1}
+          </a>
+        `).join(' ');
+
+        showResult('splitResult', `
+          <div><strong>Success!</strong> Split into ${data.files.length} file(s) (${data.totalPages} total pages).</div>
+          <div class="download-links-group" style="margin-top: 10px;">${links}</div>
+        `);
+      } catch (err) {
+        showResult('splitResult', err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Split PDF Now`;
+      }
+    }
+
+    // 3. COMPRESS PDF
+    async function compressPdf() {
+      const input = document.getElementById('compressFile');
+      const btn = document.getElementById('btn-compress');
+      if (!input.files || !input.files.length) return showResult('compressResult', 'Please select a PDF file to compress.', true);
+
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Compressing PDF...`;
+      showResult('compressResult', 'Optimizing your PDF document...');
+
+      try {
+        const res = await fetch(`${API}/api/compress`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        showResult('compressResult', `
+          <div>
+            <strong>Success!</strong> Reduced from ${(data.originalSize/1024).toFixed(0)} KB to ${(data.compressedSize/1024).toFixed(0)} KB 
+            <span style="color: var(--success); font-weight:700;">(${data.savedPercent}% saved)</span>
+          </div>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Compressed PDF
+          </a>
+        `);
+      } catch (err) {
+        showResult('compressResult', err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Compress PDF Now`;
+      }
+    }
+
+    // 4. IMAGE TO PDF
+    async function imageToPdf() {
+      const input = document.getElementById('img2pdfFiles');
+      const btn = document.getElementById('btn-img2pdf');
+      if (!input.files || input.files.length === 0) return showResult('img2pdfResult', 'Please select at least 1 image file.', true);
+
+      const formData = new FormData();
+      for (const f of input.files) formData.append('images', f);
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Converting Images...`;
+      showResult('img2pdfResult', 'Converting images into PDF...');
+
+      try {
+        const res = await fetch(`${API}/api/image-to-pdf`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        showResult('img2pdfResult', `
+          <span><strong>Success!</strong> Created PDF from ${input.files.length} image(s).</span>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Generated PDF
+          </a>
+        `);
+      } catch (err) {
+        showResult('img2pdfResult', err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Convert Images to PDF`;
+      }
+    }
+
+    // 5. PDF TO IMAGE
+    async function pdfToImage() {
+      const input = document.getElementById('pdf2imgFile');
+      const btn = document.getElementById('btn-pdf2img');
+      if (!input.files || !input.files.length) return showResult('pdf2imgResult', 'Please select a PDF file.', true);
+
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+      formData.append('format', document.getElementById('pdf2imgFormat').value);
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Converting PDF Pages...`;
+      showResult('pdf2imgResult', 'Converting PDF pages into images...');
+
+      try {
+        const res = await fetch(`${API}/api/pdf-to-image`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        const links = data.files.map((url, i) => `
+          <a class="download-btn" href="${getDownloadUrl(url)}" download>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Page ${i + 1}
+          </a>
+        `).join(' ');
+
+        showResult('pdf2imgResult', `
+          <div><strong>Success!</strong> Converted ${data.totalPages} page(s) into images.</div>
+          <div class="download-links-group" style="margin-top: 10px;">${links}</div>
+        `);
+      } catch (err) {
+        showResult('pdf2imgResult', err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Convert PDF to Images`;
+      }
+    }
+
+    // 6. JPG ↔ PNG IMAGE CONVERTER
+    async function convertImage() {
+      const input = document.getElementById('convertimgFile');
+      const btn = document.getElementById('btn-convertimg');
+      if (!input.files || !input.files.length) return showResult('convertimgResult', 'Please select an image file.', true);
+
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+      formData.append('targetFormat', document.getElementById('convertimgTarget').value);
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Converting Format...`;
+      showResult('convertimgResult', 'Converting image format...');
+
+      try {
+        const res = await fetch(`${API}/api/convert-image`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        showResult('convertimgResult', `
+          <span><strong>Success!</strong> Image format converted.</span>
+          <a class="download-btn" href="${getDownloadUrl(data.downloadUrl)}" download>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Converted Image
+          </a>
+        `);
+      } catch (err) {
+        showResult('convertimgResult', err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Convert Image Format`;
+      }
+    }
+  </script>
+</body>
+</html>

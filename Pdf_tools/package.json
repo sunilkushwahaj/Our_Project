@@ -1,0 +1,21 @@
+{
+  "name": "pdf-tool",
+  "version": "1.0.0",
+  "description": "Merge, Split, Compress, Image to PDF, PDF to Image, and Image Converter tools",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "pdf-img-convert": "^1.2.1",
+    "pdf-lib": "^1.17.1",
+    "sharp": "^0.33.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

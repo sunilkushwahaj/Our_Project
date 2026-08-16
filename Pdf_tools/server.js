@@ -1,0 +1,330 @@
+const express = require('express');
+const multer = require('multer');
+const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
+const { PDFDocument } = require('pdf-lib');
+const sharp = require('sharp');
+const pdfImgConvert = require('pdf-img-convert');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// ---- Setup folders ----
+const UPLOAD_DIR = path.join(__dirname, 'uploads');
+const OUTPUT_DIR = path.join(__dirname, 'outputs');
+[UPLOAD_DIR, OUTPUT_DIR].forEach(dir => {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+});
+
+app.use(cors());
+app.use(express.static('public'));
+app.use('/outputs', express.static(OUTPUT_DIR));
+
+// ---- Multer config (file upload) ----
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, UPLOAD_DIR),
+  filename: (req, file, cb) => {
+    const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, unique + '-' + file.originalname.replace(/\s+/g, '_'));
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB per file
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/pdf' || file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only PDF or image files are allowed'));
+    }
+  }
+});
+
+// ---- Helper: auto-delete a file after delay (privacy) ----
+function scheduleDelete(filePath, delayMs = 60 * 60 * 1000) { // default 1 hour
+  setTimeout(() => {
+    fs.unlink(filePath, (err) => {
+      if (err && err.code !== 'ENOENT') console.error('Delete failed:', filePath, err.message);
+    });
+  }, delayMs);
+}
+
+// =========================================================
+// 1. MERGE PDF - combine multiple PDFs into one
+// =========================================================
+app.post('/api/merge', upload.array('files', 20), async (req, res) => {
+  const uploadedFiles = req.files;
+  try {
+    if (!uploadedFiles || uploadedFiles.length < 2) {
+      return res.status(400).json({ error: 'Upload at least 2 PDF files to merge' });
+    }
+
+    const mergedPdf = await PDFDocument.create();
+
+    for (const file of uploadedFiles) {
+      const fileBytes = fs.readFileSync(file.path);
+      const pdf = await PDFDocument.load(fileBytes);
+      const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+      copiedPages.forEach((page) => mergedPdf.addPage(page));
+    }
+
+    const mergedBytes = await mergedPdf.save();
+    const outputFilename = `merged-${Date.now()}.pdf`;
+    const outputPath = path.join(OUTPUT_DIR, outputFilename);
+    fs.writeFileSync(outputPath, mergedBytes);
+
+    // cleanup uploaded originals immediately, output after 1 hour
+    uploadedFiles.forEach(f => fs.unlink(f.path, () => {}));
+    scheduleDelete(outputPath);
+
+    res.json({ success: true, downloadUrl: `/outputs/${outputFilename}` });
+  } catch (err) {
+    console.error(err);
+    if (uploadedFiles) uploadedFiles.forEach(f => fs.unlink(f.path, () => {}));
+    res.status(500).json({ error: 'Failed to merge PDFs: ' + err.message });
+  }
+});
+
+// =========================================================
+// 2. SPLIT PDF - extract page range or split into individual pages
+// =========================================================
+app.post('/api/split', upload.single('file'), async (req, res) => {
+  const uploadedFile = req.file;
+  try {
+    if (!uploadedFile) return res.status(400).json({ error: 'Upload a PDF file' });
+
+    const { mode, startPage, endPage } = req.body; // mode: 'range' | 'all'
+    const fileBytes = fs.readFileSync(uploadedFile.path);
+    const srcPdf = await PDFDocument.load(fileBytes);
+    const totalPages = srcPdf.getPageCount();
+
+    const outputFiles = [];
+
+    if (mode === 'all') {
+      // one PDF per page
+      for (let i = 0; i < totalPages; i++) {
+        const newPdf = await PDFDocument.create();
+        const [copiedPage] = await newPdf.copyPages(srcPdf, [i]);
+        newPdf.addPage(copiedPage);
+        const bytes = await newPdf.save();
+        const filename = `split-page-${i + 1}-${Date.now()}.pdf`;
+        const outPath = path.join(OUTPUT_DIR, filename);
+        fs.writeFileSync(outPath, bytes);
+        scheduleDelete(outPath);
+        outputFiles.push(`/outputs/${filename}`);
+      }
+    } else {
+      // extract a specific page range
+      const start = Math.max(0, parseInt(startPage || 1, 10) - 1);
+      const end = Math.min(totalPages - 1, parseInt(endPage || totalPages, 10) - 1);
+
+      if (start > end) {
+        fs.unlink(uploadedFile.path, () => {});
+        return res.status(400).json({ error: 'Invalid page range' });
+      }
+
+      const pageIndices = [];
+      for (let i = start; i <= end; i++) pageIndices.push(i);
+
+      const newPdf = await PDFDocument.create();
+      const copiedPages = await newPdf.copyPages(srcPdf, pageIndices);
+      copiedPages.forEach(page => newPdf.addPage(page));
+
+      const bytes = await newPdf.save();
+      const filename = `split-range-${Date.now()}.pdf`;
+      const outPath = path.join(OUTPUT_DIR, filename);
+      fs.writeFileSync(outPath, bytes);
+      scheduleDelete(outPath);
+      outputFiles.push(`/outputs/${filename}`);
+    }
+
+    fs.unlink(uploadedFile.path, () => {});
+    res.json({ success: true, files: outputFiles, totalPages });
+  } catch (err) {
+    console.error(err);
+    if (uploadedFile) fs.unlink(uploadedFile.path, () => {});
+    res.status(500).json({ error: 'Failed to split PDF: ' + err.message });
+  }
+});
+
+// =========================================================
+// 3. COMPRESS PDF - reduce file size
+// =========================================================
+app.post('/api/compress', upload.single('file'), async (req, res) => {
+  const uploadedFile = req.file;
+  try {
+    if (!uploadedFile) return res.status(400).json({ error: 'Upload a PDF file' });
+
+    const originalSize = uploadedFile.size;
+    const fileBytes = fs.readFileSync(uploadedFile.path);
+    const pdf = await PDFDocument.load(fileBytes);
+
+    const compressedBytes = await pdf.save({
+      useObjectStreams: true,
+      addDefaultPage: false,
+    });
+
+    const filename = `compressed-${Date.now()}.pdf`;
+    const outputPath = path.join(OUTPUT_DIR, filename);
+    fs.writeFileSync(outputPath, compressedBytes);
+    scheduleDelete(outputPath);
+
+    fs.unlink(uploadedFile.path, () => {});
+
+    res.json({
+      success: true,
+      downloadUrl: `/outputs/${filename}`,
+      originalSize,
+      compressedSize: compressedBytes.length,
+      savedPercent: (((originalSize - compressedBytes.length) / originalSize) * 100).toFixed(1)
+    });
+  } catch (err) {
+    console.error(err);
+    if (uploadedFile) fs.unlink(uploadedFile.path, () => {});
+    res.status(500).json({ error: 'Failed to compress PDF: ' + err.message });
+  }
+});
+
+// =========================================================
+// 4. IMAGE TO PDF - convert images (JPG/PNG/WebP) to single PDF
+// =========================================================
+app.post('/api/image-to-pdf', upload.array('images', 30), async (req, res) => {
+  const uploadedFiles = req.files;
+  try {
+    if (!uploadedFiles || uploadedFiles.length === 0) {
+      return res.status(400).json({ error: 'Upload at least 1 image file' });
+    }
+
+    const pdfDoc = await PDFDocument.create();
+
+    for (const file of uploadedFiles) {
+      const fileBytes = fs.readFileSync(file.path);
+      const metadata = await sharp(file.path).metadata();
+
+      let embeddedImage;
+      if (metadata.format === 'jpeg' || metadata.format === 'jpg') {
+        embeddedImage = await pdfDoc.embedJpg(fileBytes);
+      } else if (metadata.format === 'png') {
+        embeddedImage = await pdfDoc.embedPng(fileBytes);
+      } else {
+        // Convert webp/gif/bmp to png buffer via sharp
+        const pngBuffer = await sharp(file.path).toFormat('png').toBuffer();
+        embeddedImage = await pdfDoc.embedPng(pngBuffer);
+      }
+
+      const page = pdfDoc.addPage([embeddedImage.width, embeddedImage.height]);
+      page.drawImage(embeddedImage, {
+        x: 0,
+        y: 0,
+        width: embeddedImage.width,
+        height: embeddedImage.height,
+      });
+    }
+
+    const pdfBytes = await pdfDoc.save();
+    const outputFilename = `image-to-pdf-${Date.now()}.pdf`;
+    const outputPath = path.join(OUTPUT_DIR, outputFilename);
+    fs.writeFileSync(outputPath, pdfBytes);
+
+    uploadedFiles.forEach(f => fs.unlink(f.path, () => {}));
+    scheduleDelete(outputPath);
+
+    res.json({ success: true, downloadUrl: `/outputs/${outputFilename}` });
+  } catch (err) {
+    console.error(err);
+    if (uploadedFiles) uploadedFiles.forEach(f => fs.unlink(f.path, () => {}));
+    res.status(500).json({ error: 'Failed to convert images to PDF: ' + err.message });
+  }
+});
+
+// =========================================================
+// 5. PDF TO IMAGE - convert each PDF page into PNG or JPG image
+// =========================================================
+app.post('/api/pdf-to-image', upload.single('file'), async (req, res) => {
+  const uploadedFile = req.file;
+  try {
+    if (!uploadedFile) return res.status(400).json({ error: 'Upload a PDF file' });
+
+    const format = (req.body.format || 'png').toLowerCase(); // 'png' or 'jpg'
+
+    // pdf-img-convert renders array of image buffers (Uint8Array)
+    const outputImages = await pdfImgConvert.convert(uploadedFile.path, {
+      outputType: 'png'
+    });
+
+    const outputFiles = [];
+    for (let i = 0; i < outputImages.length; i++) {
+      let imgBuffer = Buffer.from(outputImages[i]);
+      if (format === 'jpg' || format === 'jpeg') {
+        imgBuffer = await sharp(imgBuffer).jpeg({ quality: 90 }).toBuffer();
+      }
+
+      const ext = format === 'jpg' ? 'jpg' : 'png';
+      const filename = `pdf-page-${i + 1}-${Date.now()}.${ext}`;
+      const outPath = path.join(OUTPUT_DIR, filename);
+      fs.writeFileSync(outPath, imgBuffer);
+      scheduleDelete(outPath);
+      outputFiles.push(`/outputs/${filename}`);
+    }
+
+    fs.unlink(uploadedFile.path, () => {});
+    res.json({ success: true, files: outputFiles, totalPages: outputImages.length });
+  } catch (err) {
+    console.error(err);
+    if (uploadedFile) fs.unlink(uploadedFile.path, () => {});
+    res.status(500).json({ error: 'Failed to convert PDF to images: ' + err.message });
+  }
+});
+
+// =========================================================
+// 6. JPG ↔ PNG IMAGE CONVERTER - convert image format
+// =========================================================
+app.post('/api/convert-image', upload.single('file'), async (req, res) => {
+  const uploadedFile = req.file;
+  try {
+    if (!uploadedFile) return res.status(400).json({ error: 'Upload an image file' });
+
+    const targetFormat = (req.body.targetFormat || 'png').toLowerCase(); // 'png' | 'jpg' | 'webp'
+    let sharpInstance = sharp(uploadedFile.path);
+
+    let outputBuffer;
+    let ext;
+    if (targetFormat === 'jpg' || targetFormat === 'jpeg') {
+      outputBuffer = await sharpInstance.jpeg({ quality: 90 }).toBuffer();
+      ext = 'jpg';
+    } else if (targetFormat === 'webp') {
+      outputBuffer = await sharpInstance.webp({ quality: 90 }).toBuffer();
+      ext = 'webp';
+    } else {
+      outputBuffer = await sharpInstance.png().toBuffer();
+      ext = 'png';
+    }
+
+    const filename = `converted-${Date.now()}.${ext}`;
+    const outputPath = path.join(OUTPUT_DIR, filename);
+    fs.writeFileSync(outputPath, outputBuffer);
+
+    fs.unlink(uploadedFile.path, () => {});
+    scheduleDelete(outputPath);
+
+    res.json({ success: true, downloadUrl: `/outputs/${filename}` });
+  } catch (err) {
+    console.error(err);
+    if (uploadedFile) fs.unlink(uploadedFile.path, () => {});
+    res.status(500).json({ error: 'Failed to convert image format: ' + err.message });
+  }
+});
+
+// ---- Error handler for multer errors ----
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError || err.message.includes('Only PDF')) {
+    return res.status(400).json({ error: err.message });
+  }
+  next(err);
+});
+
+app.listen(PORT, () => {
+  console.log(`PDF Tool server running on http://localhost:${PORT}`);
+});
