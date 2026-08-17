@@ -38,7 +38,12 @@ const OUTPUT_DIR = path.join(__dirname, 'outputs');
 
 app.use(cors());
 app.use(express.static('public'));
-app.use('/outputs', express.static(OUTPUT_DIR));
+app.use('/outputs', express.static(OUTPUT_DIR, {
+  setHeaders: (res, filePath) => {
+    const filename = path.basename(filePath);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  }
+}));
 
 // ---- Multer config (file upload) ----
 const storage = multer.diskStorage({
